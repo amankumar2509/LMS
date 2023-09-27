@@ -96,6 +96,12 @@ class Form_controller extends CI_Controller{
 }
 
 
+
+//controller for fetching data from db
+public function fetch_user(){
+    
+}
+
     
 }
 ?>

@@ -23,13 +23,14 @@
         <div class="formerr"></div>
       </div>
       <div class="input-box button">
-        <input type="Submit" value="login Now">
+        <input type="submit" value="login Now">
       </div>
       <div id="msg"></div>
       
     </form>
   </div>
   <script type="text/javascript">
+
      $(document).ready(function () {
     $('#form').submit(function (e) { 
         e.preventDefault();
@@ -51,6 +52,7 @@
         });
     });
 });
+
 
   </script>
 </body>
