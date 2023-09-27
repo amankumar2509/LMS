@@ -8,6 +8,8 @@ class Form_controller extends CI_Controller{
             $this->load->helper('url');
             $this->load->helper('form');
             $this->load->library('form_validation');
+            $this->load->library('session');
+
 
 
         }
@@ -55,11 +57,16 @@ class Form_controller extends CI_Controller{
             $password = $this->input->post('password');
             $result= $this->form_model->checkLogin($email,$password);
             if($result)
+            {
+                $this->session->set_userdata('logged_in', true);
                 echo json_encode(['data'=>'true' , 'url'=>base_url('form_controller/userpage')]);
+            }
             else 
+            {
                 echo json_encode(['data'=>'false']);
 
              }
+        }
 
            
 
@@ -69,9 +76,21 @@ class Form_controller extends CI_Controller{
         $this->ajax_login();
     }
     
-    public function userpage(){
-        $this->load->view('userpage');
+    public function userpage()
+    {
+    if (!$this->session->userdata('logged_in')) {
+        redirect(base_url('form_controller/login')); 
     }
+    $this->load->view('userpage');
+    }
+    public function logout()
+{
+    
+    $this->session->sess_destroy();
+    redirect(base_url('form_controller/login'));
+}
+
+
     
 }
 ?>
