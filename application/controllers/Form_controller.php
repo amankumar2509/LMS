@@ -72,8 +72,13 @@ class Form_controller extends CI_Controller{
 
     }
     public function login(){
+        if($this->session->userdata('logged_in')){
+            redirect('form_controller/userpage');
+        }
+        else{
         $this->load->view('login');
-        $this->ajax_login();
+       // $this->ajax_login();
+        }
     }
     
     public function userpage()
