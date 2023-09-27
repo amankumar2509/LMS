@@ -5,6 +5,7 @@ class Form_controller extends CI_Controller{
         parent::__construct();
         {
             $this->load->model('form_model');
+            $this->load->model("crud_model");
             $this->load->helper('url');
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -98,9 +99,6 @@ class Form_controller extends CI_Controller{
 
 
 //controller for fetching data from db
-public function fetch_user(){
-    
-}
 
     
 }
