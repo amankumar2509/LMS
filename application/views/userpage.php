@@ -25,11 +25,35 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+
+        /* Style for the navigation bar */
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 0;
+        }
+
+        /* Style for the logout button */
+        .logout-btn {
+            float: right;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Welcome to Admin Page</h1>
+    <div class="navbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>Welcome to Admin Page</h1>
+                </div>
+                <div class="col-md-6">
+                    <a href="<?php echo base_url('form_controller/logout'); ?>" class="btn btn-danger logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container box">
         <div class="table-responsive">
             <br />
@@ -39,14 +63,13 @@
                         <th width="10%">Id</th>
                         <th width="35%">Name</th>
                         <th width="35%">Email</th>
-                       
+                        <th width="10%">Edit</th>
+                    </tr>
                 </thead>
             </table>
         </div>
     </div>
 
-    <!-- Add a logout button with a link to the logout URL -->
-    <a href="<?php echo base_url('form_controller/logout'); ?>">Logout</a>
     <script>
         $(document).ready(function () {
             $('#user_data').DataTable({
@@ -59,19 +82,8 @@
                 "columns": [
                     { "data": "id" },
                     { "data": "name" },
-                    { "data": "email" }
-                    // {
-                    //     "data": null,
-                    //     "render": function (data, type, row) {
-                    //         return '<a href="edit.php?id=' + data.id + '">Edit</a>';
-                    //     }
-                    // },
-                    // {
-                    //     "data": null,
-                    //     "render": function (data, type, row) {
-                    //         return '<a href="delete.php?id=' + data.id + '">Delete</a>';
-                    //     }
-                    // }
+                    { "data": "email" },
+                    { "data": "edit" },
                 ]
             });
         });
