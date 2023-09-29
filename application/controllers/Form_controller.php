@@ -120,6 +120,16 @@ public function getSubjects(){
         // $topics = $this->your_model->getTopicsByOption($selectedOption); // Replace with your model logic
         echo json_encode($data); // Return topics as JSON
     }
+    public function getQuestion(){
+        $this->load->database();
+        
+        $sub=$this->input->post('subject_id');
+        $top=$this->input->post('topic_id');
+        $this->db->select('question');
+        $this->db->where(['subject_id'=>$sub,'topic_id'=>$top]);
+        $data=$this->db->get('course_question_bank_master')->result_array();
+        echo json_encode($data);
+    }
 
 
     

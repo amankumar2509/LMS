@@ -114,6 +114,20 @@ body {
         </select>
     </form>
 
+    <div class="container box">
+        <div class="table-responsive">
+            <br />
+            <table id="user_data" class="table table-bordered table-striped" style="border:2px solid black">
+                <thead  style="border:2px solid black">
+                    <tr>
+                        <th width="35%" style="border:2px solid black; background-color:antiquewhite">question</th>
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
     <!-- Your JavaScript code -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -181,6 +195,37 @@ body {
                 }
             });
         });
+        $(function(){
+            $("#second_dropdown").change(function(){
+
+                var sub=$('#first_dropdown').val();
+                var top=$('#second_dropdown').val();
+                $.ajax({
+                    url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
+                method: 'POST',
+                data: {
+                    "topic_id":top ,
+                    "subject_id":sub
+                },
+                dataType:'json',
+                success: function(data) {
+                        if (data != 0) {
+                            $.each(data, function(index, topic) {
+                                $("#user_data").append("<tr><td>" + topic.question +
+                                    "</td></tr>");
+                            });
+
+                        } else {
+                            console.log(null);
+                        }
+                    },
+                    error: function() {
+                        alert("An error occurred while fetching topics.");
+                    }
+                });
+            })
+        });
+
 
       
     });
