@@ -125,7 +125,7 @@ public function getSubjects(){
         
         $sub=$this->input->post('subject_id');
         $top=$this->input->post('topic_id');
-        $this->db->select('question');
+        $this->db->select(['question','option_1','option_2','option_3','option_4']);
         $this->db->where(['subject_id'=>$sub,'topic_id'=>$top]);
         $data=$this->db->get('course_question_bank_master')->result_array();
         echo json_encode($data);

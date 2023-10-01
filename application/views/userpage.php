@@ -47,7 +47,7 @@
             font-size: 24px;
         }
 
-     
+
 
         /* Example CSS for form styling */
         .form-container {
@@ -97,8 +97,7 @@
                     <h1>Welcome to Admin Page</h1>
                 </div>
                 <div class="col-md-6">
-                    <a href="<?php echo base_url('form_controller/logout'); ?>"
-                        class=".logout-button">Logout</a>
+                    <a href="<?php echo base_url('form_controller/logout'); ?>" class=".logout-button">Logout</a>
                 </div>
             </div>
         </div>
@@ -232,7 +231,11 @@
                                 var table = $('#user_data').DataTable({
                                     data: data,
                                     columns: [
-                                        { data: 'question' }, // Assuming your JSON data has a 'question' field
+                                        { data: 'question' },
+                                        { data: 'option_1' }, 
+                                        { data: 'option_2' }, 
+                                        { data: 'option_3' },
+                                        { data: 'option_4' }  
                                     ]
                                 });
                             } else {
