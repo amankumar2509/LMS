@@ -120,18 +120,39 @@ public function getSubjects(){
         // $topics = $this->your_model->getTopicsByOption($selectedOption); // Replace with your model logic
         echo json_encode($data); // Return topics as JSON
     }
+    // public function getQuestion(){
+    //     $this->load->database();
+        
+    //     $sub=$this->input->post('subject_id');
+    //     $top=$this->input->post('topic_id');
+    //     $this->db->select(['question','option_1','option_2','option_3','option_4']);
+    //     $this->db->where(['subject_id'=>$sub,'topic_id'=>$top]);
+    //     $data=$this->db->get('course_question_bank_master')->result_array();
+    //     echo json_encode($data);
+    // }
+
+
     public function getQuestion(){
         $this->load->database();
         
-        $sub=$this->input->post('subject_id');
-        $top=$this->input->post('topic_id');
-        $this->db->select(['question','option_1','option_2','option_3','option_4']);
-        $this->db->where(['subject_id'=>$sub,'topic_id'=>$top]);
-        $data=$this->db->get('course_question_bank_master')->result_array();
+        $sub = $this->input->post('subject_id');
+        $top = $this->input->post('topic_id');
+        
+        // select statement to include 'question' and all options
+        $this->db->select([' question', 
+                            'option_1 AS option1', '1 AS option_order',
+                            'option_2 AS option2','2 AS option_order',
+                            'option_3 AS option3','3 AS option_order',
+                            'option_4 AS option4','4 AS option_order'
+                        ]);
+        $this->db->where(['subject_id' => $sub, 'topic_id' => $top]);
+        
+        $data = $this->db->get('course_question_bank_master')->result_array();
+        
+       
+        
         echo json_encode($data);
     }
-
-
     
 }
 

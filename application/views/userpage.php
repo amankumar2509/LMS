@@ -231,12 +231,18 @@
                                 var table = $('#user_data').DataTable({
                                     data: data,
                                     columns: [
-                                        { data: 'question' },
-                                        { data: 'option_1' }, 
-                                        { data: 'option_2' }, 
-                                        { data: 'option_3' },
-                                        { data: 'option_4' }  
-                                    ]
+                                        // { data: 'question' },
+                                        // { data: 'option_1' }, 
+                                        // { data: 'option_2' }, 
+                                        // { data: 'option_3' },
+                                        // { data: 'option_4' }  
+                                        { data: 'question', title: 'Question' },
+                                        { data: 'option1', title: 'Option' },
+                                        { data: 'option2', title: 'Option' },
+                                        { data: 'option3', title: 'Option' },
+                                        { data: 'option4', title: 'Option' }
+                                    ],
+                                    order:[0] //sort first column (question)
                                 });
                             } else {
                                 console.log("No data to display.");
