@@ -4,11 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+
     <title>User Page</title>
 
     <style>
@@ -86,6 +98,19 @@
         .form-container .login-button:hover {
             background-color: #555;
         }
+
+        .btn-word {
+            background-color: #337ab7;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-word:hover {
+            background-color: #286090;
+        }
     </style>
 </head>
 
@@ -121,6 +146,13 @@
 
         </form>
     </div>
+       <form method="post"  id="download_content_csv" action="">
+                    <button class="btn btn-xs">
+                        <i class="fa fa-download mr-2" aria-hidden="true"></i>
+                        Download CSV
+                    </button>
+                   
+                </form>
 
     <div class="container box">
         <div class="table-responsive">
@@ -204,11 +236,15 @@
                     }
                 });
             });
+
             $(document).ready(function () {
                 $("#second_dropdown").change(function () {
 
                     var sub = $('#first_dropdown').val();
                     var top = $('#second_dropdown').val();
+                    var hrefa="<?php echo base_url(); ?>form_Controller/get_csv/"+sub+"/"+top;
+                    $('#download_content_csv').attr('action',hrefa);
+                    $('#download_content_csv').prop('disable',false);
                     $.ajax({
                         url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
                         method: 'POST',
@@ -229,6 +265,12 @@
                             // }
                             if (data.length > 0) {
                                 var table = $('#user_data').DataTable({
+                                    "bDestroy": true,
+                                    dom: 'lBftrip',
+                                    buttons: [
+                                        'excel','csv','pdf'
+                                        
+                                    ],
                                     data: data,
                                     columns: [
                                         // { data: 'question' },
@@ -240,9 +282,10 @@
                                         { data: 'option1', title: 'Option' },
                                         { data: 'option2', title: 'Option' },
                                         { data: 'option3', title: 'Option' },
-                                        { data: 'option4', title: 'Option' }
+                                        { data: 'option4', title: 'Option' },
+                                        { data: 'answer', title: 'Answer' }
                                     ],
-                                    order:[0] //sort first column (question)
+                                    order: [0] //sort first column (question)
                                 });
                             } else {
                                 console.log("No data to display.");
@@ -256,6 +299,28 @@
                     });
                 })
             });
+        //     $("#download_content_csv").click(function(e) {
+        //     e.preventDefault();
+
+        //     var top = $("#second_dropdown").val();
+        //     var sub = $("#first_dropdown").val();
+        //     $.ajax({
+        //         url: '<?php echo base_url('form_Controller/get_csv'); ?>',
+        //         method: 'POST',
+        //         data: {
+        //             "topic_id": top,
+        //             "subject_id": sub
+        //         },
+        //        // dataType: 'json',
+        //         success: function(data) {
+        //             alert('file_downloaded successfully');
+        //         },
+        //         error: function() {
+        //             alert("An error occurred.");
+        //         }
+        //     });
+
+        // });
 
 
 

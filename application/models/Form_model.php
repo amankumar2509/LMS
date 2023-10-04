@@ -23,6 +23,19 @@ class Form_model extends CI_Model {
         }
        
     } 
+    // public function csvModel(){
+    //      $sub = $this->input->post('subject_id');
+    //      $top = $this->input->post('topic_id');
+        
+    //     $this->db->select('question, option_1, option_2, option_3, option_4, answer');
+       
+       
+        
+    //     $q = $this->db->get_where('course_question_bank_master',['subject_id'=>$sub,'topic_id'=>$top]);
+        
+    //     $response= $q->result_array();
+    //     return $response;
+    // }
     
  }
 ?>
