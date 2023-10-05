@@ -146,13 +146,20 @@
 
         </form>
     </div>
-       <form method="post"  id="download_content_csv" action="">
-                    <button class="btn btn-xs">
-                        <i class="fa fa-download mr-2" aria-hidden="true"></i>
-                        Download CSV
-                    </button>
-                   
-                </form>
+    <form method="post" id="download_content_csv" action="">
+        <button class="btn btn-xs">
+            <i class="fa fa-download mr-2" aria-hidden="true"></i>
+            Download CSV
+        </button>
+
+    </form>
+    <form method="post" id="Dword" action="">
+        <button class="btn btn-xs">
+            <i class="fa fa-download mr-2" aria-hidden="true"></i>
+            Download word
+        </button>
+
+    </form>
 
     <div class="container box">
         <div class="table-responsive">
@@ -242,9 +249,15 @@
 
                     var sub = $('#first_dropdown').val();
                     var top = $('#second_dropdown').val();
-                    var hrefa="<?php echo base_url(); ?>form_Controller/get_csv/"+sub+"/"+top;
-                    $('#download_content_csv').attr('action',hrefa);
-                    $('#download_content_csv').prop('disable',false);
+                    var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top;
+                    $('#download_content_csv').attr('action', hrefa);
+                    $('#download_content_csv').prop('disable', false);
+
+                    var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top;
+                    $('#Dword').attr('action', hrefac);
+                    $('#Dword').prop('disable', false);
+
+
                     $.ajax({
                         url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
                         method: 'POST',
@@ -268,8 +281,8 @@
                                     "bDestroy": true,
                                     dom: 'lBftrip',
                                     buttons: [
-                                        'excel','csv','pdf'
-                                        
+                                        'excel', 'csv', 'pdf'
+
                                     ],
                                     data: data,
                                     columns: [
@@ -299,28 +312,28 @@
                     });
                 })
             });
-        //     $("#download_content_csv").click(function(e) {
-        //     e.preventDefault();
+            //     $("#download_content_csv").click(function(e) {
+            //     e.preventDefault();
 
-        //     var top = $("#second_dropdown").val();
-        //     var sub = $("#first_dropdown").val();
-        //     $.ajax({
-        //         url: '<?php echo base_url('form_Controller/get_csv'); ?>',
-        //         method: 'POST',
-        //         data: {
-        //             "topic_id": top,
-        //             "subject_id": sub
-        //         },
-        //        // dataType: 'json',
-        //         success: function(data) {
-        //             alert('file_downloaded successfully');
-        //         },
-        //         error: function() {
-        //             alert("An error occurred.");
-        //         }
-        //     });
+            //     var top = $("#second_dropdown").val();
+            //     var sub = $("#first_dropdown").val();
+            //     $.ajax({
+            //         url: '<?php echo base_url('form_Controller/get_csv'); ?>',
+            //         method: 'POST',
+            //         data: {
+            //             "topic_id": top,
+            //             "subject_id": sub
+            //         },
+            //        // dataType: 'json',
+            //         success: function(data) {
+            //             alert('file_downloaded successfully');
+            //         },
+            //         error: function() {
+            //             alert("An error occurred.");
+            //         }
+            //     });
 
-        // });
+            // });
 
 
 

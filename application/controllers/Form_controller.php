@@ -161,7 +161,7 @@ class Form_controller extends CI_Controller
     }
 
 
-    public function get_csv($sub,$top)
+    public function get_csv($sub, $top)
     {
         $this->load->database();
         // $this->load->model('form_model');
@@ -184,7 +184,7 @@ class Form_controller extends CI_Controller
         $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top]);
 
         $usersData = $q->result_array();
-        
+
 
         header("Content-Description: File Transfer");
         header("Content-Disposition: attachment; filename=questions.csv");
@@ -201,14 +201,14 @@ class Form_controller extends CI_Controller
         $header = array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer');
 
         fputcsv($file, $header);
-        
+
         // Output each row of data
         // foreach ($usersData as $row) {
         //     fputcsv($file, $row);
         // }
         foreach ($usersData as $line) {
 
-// print_r($line);die;
+            // print_r($line);die;
             $nestedDataCSV = array();
             $nestedDataCSV[] = strip_tags($line['question']);
             $nestedDataCSV[] = strip_tags($line['option_1']);
@@ -216,7 +216,7 @@ class Form_controller extends CI_Controller
             $nestedDataCSV[] = strip_tags($line['option_3']);
             $nestedDataCSV[] = strip_tags($line['option_4']);
             $nestedDataCSV[] = strip_tags($line['answer']);
-            
+
             fputcsv($file, $nestedDataCSV);
         }
         // Close the file pointer
@@ -225,6 +225,52 @@ class Form_controller extends CI_Controller
         exit;
 
 
+
+
+    }
+    public function get_word($sub, $top)
+    {
+        $this->load->database();
+        $this->db->select('question, option_1, option_2, option_3, option_4, answer');
+
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top]);
+        $usersData = $q->result_array();
+
+
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=questions.doc");
+        header("Content-Type: application/vnd.ms-word");
+        $file = fopen('php://output', 'w');
+        fputs($file, "\xEF\xBB\xBF");
+        // $header=array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer');
+        // $headerString=implode(',',$header);
+        // fputs($file,$headerString);
+
+        //  foreach ($usersData as $line) {
+        //      fputcsv($file, $line);
+        //  }
+        foreach ($usersData as $line) {
+
+            // print_r($line);die;
+            // $nestedData = array();
+            // $nestedData[] ='Question'. strip_tags($line['question']);
+            // $nestedData[] = 'Option_1:'.strip_tags($line['option_1']);
+            // $nestedData[] = 'option_2:'.strip_tags($line['option_2']);
+            // $nestedData[] = 'option_3:'.strip_tags($line['option_3']);
+            // $nestedData[] = 'option_4:'.strip_tags($line['option_4']);
+            // $nestedData[] = 'Answer:'.strip_tags($line['answer']);
+            // fputcsv($file, $nestedData);
+            $content = 'Question: ' . preg_replace('/[,"]+/', '', strip_tags($line['question'])) . PHP_EOL;
+            $content .= 'Option_1: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_1']));
+            $content .= 'Option_2: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_2']));
+            $content .= 'Option_3: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_3']));
+            $content .= 'Option_4: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_4'])) . PHP_EOL;
+            $content .= 'Answer: ' . preg_replace('/[,"]+/', '', strip_tags($line['answer'])) . PHP_EOL . PHP_EOL;
+
+            fwrite($file, $content);
+        }
+        fclose($file);
+        exit;
 
 
     }
