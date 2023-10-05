@@ -341,7 +341,9 @@
                             // } else {
                             //     console.log(null);
                             // }
-                            if (data.length > 0) {
+                            if (data.length == 0) {
+                                data: [];
+                            }
                                 var table = $('#user_data').DataTable({
                                     "bDestroy": true,
                                     dom: 'lBftrip',
@@ -365,9 +367,7 @@
                                     ],
                                     order: [0] //sort first column (question)
                                 });
-                            } else {
-                                console.log("No data to display.");
-                            }
+                            
 
 
                         },
