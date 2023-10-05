@@ -137,6 +137,7 @@ class Form_controller extends CI_Controller
 
         $sub = $this->input->post('subject_id');
         $top = $this->input->post('topic_id');
+        $lang = $this->input->post('lang_id');
 
         // select statement to include 'question' and all options
         $this->db->select([
@@ -151,7 +152,8 @@ class Form_controller extends CI_Controller
             '4 AS option_order',
             'answer '
         ]);
-        $this->db->where(['subject_id' => $sub, 'topic_id' => $top]);
+
+        $this->db->where(['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
 
         $data = $this->db->get('course_question_bank_master')->result_array();
 
@@ -161,7 +163,7 @@ class Form_controller extends CI_Controller
     }
 
 
-    public function get_csv($sub, $top)
+    public function get_csv($sub, $top,$lang)
     {
         $this->load->database();
         // $this->load->model('form_model');
@@ -181,7 +183,7 @@ class Form_controller extends CI_Controller
         // Set headers for CSV download
         //$usersData = $this->form_model->csvModel();
         $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
 
         $usersData = $q->result_array();
 
@@ -228,12 +230,12 @@ class Form_controller extends CI_Controller
 
 
     }
-    public function get_word($sub, $top)
+    public function get_word($sub, $top,$lang)
     {
         $this->load->database();
         $this->db->select('question, option_1, option_2, option_3, option_4, answer');
 
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
         $usersData = $q->result_array();
 
 

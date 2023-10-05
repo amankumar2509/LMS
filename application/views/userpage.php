@@ -142,6 +142,12 @@
                 <!-- Options for the second dropdown will be populated dynamically -->
                 <option value="">Topic appear after selection of subject</option>
             </select>
+            <label for="language_selection">Select language</label>
+            <select id="language">
+                <option value="1">English</option>
+                <option value="2">Hindi</option>
+            </select>
+
 
 
         </form>
@@ -160,6 +166,13 @@
         </button>
 
     </form>
+    <!-- <div id="language_selection">
+    <label for="language">Select Language:</label>
+    <select id="language">
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+    </select>
+</div> -->
 
     <div class="container box">
         <div class="table-responsive">
@@ -245,15 +258,16 @@
             });
 
             $(document).ready(function () {
-                $("#second_dropdown").change(function () {
+                $("#language").change(function () {
 
                     var sub = $('#first_dropdown').val();
                     var top = $('#second_dropdown').val();
-                    var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top;
+                    var lang = $("#language").val();
+                    var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top +"/" + lang;
                     $('#download_content_csv').attr('action', hrefa);
                     $('#download_content_csv').prop('disable', false);
 
-                    var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top;
+                    var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top+ "/" + lang;
                     $('#Dword').attr('action', hrefac);
                     $('#Dword').prop('disable', false);
 
@@ -263,7 +277,8 @@
                         method: 'POST',
                         data: {
                             "topic_id": top,
-                            "subject_id": sub
+                            "subject_id": sub,
+                            "lang_id":lang
                         },
                         dataType: 'json',
                         success: function (data) {
@@ -281,7 +296,7 @@
                                     "bDestroy": true,
                                     dom: 'lBftrip',
                                     buttons: [
-                                        'excel', 'csv', 'pdf'
+                                            'pdf'
 
                                     ],
                                     data: data,
