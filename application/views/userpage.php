@@ -111,6 +111,52 @@
         .btn-word:hover {
             background-color: #286090;
         }
+
+        .download-button {
+            background-color: #337ab7;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            /* Add some margin for spacing */
+            transition: background-color 0.3s ease;
+            /* Add a smooth hover effect */
+            margin-top: 5px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            margin-left: 210px;
+        }
+
+        .download-button:hover {
+            background-color: #286090;
+        }
+        #Dword{
+            float:right;
+            margin-right: 392px;
+            margin-top: -46px;
+
+        }
+
+        #logout {
+            position: absolute;
+            top: 8px;
+            right: 20px;
+            background-color: #FF6347;
+            color: #FF6347;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            /* Add some margin for spacing */
+            transition: background-color 0.3s ease;
+        }
+
+        #logout:hover {
+            background-color: #286090;
+        }
     </style>
 </head>
 
@@ -121,7 +167,7 @@
                 <div class="col-md-6">
                     <h1>Welcome to Admin Page</h1>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" id="logout">
                     <a href="<?php echo base_url('form_controller/logout'); ?>" class=".logout-button">Logout</a>
                 </div>
             </div>
@@ -143,29 +189,33 @@
                 <option value="">Topic appear after selection of subject</option>
             </select>
             <label for="language_selection">Select language</label>
-            <select id="language">
+            <select id="language" name="language">
+                <option value="0">Select language</option>
                 <option value="1">English</option>
                 <option value="2">Hindi</option>
             </select>
 
 
 
+
+        </form>
+
+        <form method="post" id="download_content_csv" action="">
+            <button class="download-button">
+                <i class="fa fa-download mr-2" aria-hidden="true"></i>
+                Download CSV
+            </button>
+
+        </form>
+        <form method="post" id="Dword" action="">
+            <button class="download-button">
+                <i class="fa fa-download mr-2" aria-hidden="true"></i>
+                Download word
+            </button>
+
         </form>
     </div>
-    <form method="post" id="download_content_csv" action="">
-        <button class="btn btn-xs">
-            <i class="fa fa-download mr-2" aria-hidden="true"></i>
-            Download CSV
-        </button>
 
-    </form>
-    <form method="post" id="Dword" action="">
-        <button class="btn btn-xs">
-            <i class="fa fa-download mr-2" aria-hidden="true"></i>
-            Download word
-        </button>
-
-    </form>
     <!-- <div id="language_selection">
     <label for="language">Select Language:</label>
     <select id="language">
@@ -263,11 +313,11 @@
                     var sub = $('#first_dropdown').val();
                     var top = $('#second_dropdown').val();
                     var lang = $("#language").val();
-                    var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top +"/" + lang;
+                    var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top + "/" + lang;
                     $('#download_content_csv').attr('action', hrefa);
                     $('#download_content_csv').prop('disable', false);
 
-                    var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top+ "/" + lang;
+                    var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top + "/" + lang;
                     $('#Dword').attr('action', hrefac);
                     $('#Dword').prop('disable', false);
 
@@ -278,7 +328,7 @@
                         data: {
                             "topic_id": top,
                             "subject_id": sub,
-                            "lang_id":lang
+                            "lang_id": lang
                         },
                         dataType: 'json',
                         success: function (data) {
@@ -296,7 +346,7 @@
                                     "bDestroy": true,
                                     dom: 'lBftrip',
                                     buttons: [
-                                            'pdf'
+                                        'pdf'
 
                                     ],
                                     data: data,
