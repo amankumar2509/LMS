@@ -251,41 +251,53 @@
 
 
 
-        //     $('#first_dropdown').select2({
-           
-        //     theme: "classic",
-        //     width: 'resolve',
-        //     allowClear: true,
-        //     // ajax: {
-        //     //     url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-        //     //     method: 'POST',
-        //     //     dataType: 'json',
-        //     //     success: function (data) {
-
-        //     //         if (data && data.length > 0) {
-        //     //             $('#first_dropdown').empty();
-        //     //             $('#first_dropdown').append('<option value="">Please Select Subject</option>');
-
-        //     //             $.each(data, function (index, subject) {
-        //     //                 $('#first_dropdown').append($('<option>', {
-        //     //                     value: subject.id,
-        //     //                     text: subject.name
-        //     //                 }));
-        //     //             });
-        //     //         } else {
-        //     //             $('#first_dropdown').empty();
-        //     //             $('#first_dropdown').append('<option value="">No subjects found</option>');
-        //     //         }
-        //     //     },
-        //     //     error: function () {
-        //     //         // Handle AJAX error here
-        //     //         alert("An error occurred while fetching subjects.");
-        //     //     }
-        //     // }
             
+            $.ajax({
+                url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+                method: 'POST',
+                dataType: 'json',
+                success: function (data) {
 
+                    // if (data && data.length > 0) {
+                    //     $('#first_dropdown').empty();
+                    //     $('#first_dropdown').append('<option value="">Please Select Subject</option>');
 
-        // });
+                    //     $.each(data, function (index, subject) {
+                    //         $('#first_dropdown').append($('<option>', {
+                    //             value: subject.id,
+                    //             text: subject.name
+                    //         }));
+                    //     });
+                    // } else {
+                    //     $('#first_dropdown').empty();
+                    //     $('#first_dropdown').append('<option value="">No subjects found</option>');
+                    // }
+                    if (data != 0) {
+            var option = "";
+            // Populate the first dropdown with fetched subjects
+            $.each(data, function (index, subject) {
+                option += `<option value="${subject.id}">${subject.id}. ${subject.name}</option>`;
+            });
+            $('#first_dropdown').append(option);
+
+            // Initialize select2 with image support
+            $("#first_dropdown").select2({
+                theme: "classic",
+                // templateResult: formatOption
+            });
+        } else {
+            // Handle the case when no subjects are found
+            alert("No subjects found");
+        }
+    },
+    error: function () {
+        // Handle AJAX error here
+        alert("An error occurred while fetching subjects.");
+    }
+            });
+//             $('#first_dropdown').select2({
+
+// });
          // ajax: {
             //         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
             //         dataType: 'json',
@@ -300,33 +312,38 @@
             //         },
             //         cache: true
             //     }
-        $('#first_dropdown').select2({
-    theme: "classic",
-    width: 'resolve',
-    allowClear: true,
-    ajax: {
-        url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-        method: 'POST',
-        dataType: 'json',
-        processResults: function (data) {
-            if (data && data.length > 0) {
-                return {
-                    results: data.map(function (subject) {
-                        return {
-                            id: subject.id,
-                            text: subject.name
-                        };
-                    })
-                };
-            } else {
-                return {
-                    results: []
-                };
-            }
-        },
-        cache: true
-    }
-});
+//         $('#first_dropdown').select2({
+//     theme: "classic",
+//     width: 'resolve',
+//     allowClear: true,
+//     ajax: {
+//         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+//         method: 'POST',
+//         dataType: 'json',
+//         data: function (params) {
+//             return {
+//                 search: params.term // Send the user's input as 'search' parameter
+//             };
+//         },
+//         processResults: function (data) {
+//             if (data && data.length > 0) {
+//                 return {
+//                     results: data.map(function (subject) {
+//                         return {
+//                             id: subject.id,
+//                             text: subject.name
+//                         };
+//                     })
+//                 };
+//             } else {
+//                 return {
+//                     results: []
+//                 };
+//             }
+//         },
+//         cache: true
+//     }
+// });
 
          
             
