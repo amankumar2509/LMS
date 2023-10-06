@@ -96,12 +96,19 @@ class Form_controller extends CI_Controller
         redirect(base_url('form_controller/login'));
     }
 
-
+    // public function getSubjects()
+    // {   
+    //     $data = $_POST['name'];
+    // $this->db->select('name');
+    // $this->db->like('name',$data);
+    // $this->db->get('course_subject_master')->result_array();
+    // }
 
     //controller for fetching data from db
     public function getSubjects()
     {
         $this->load->database();
+       
         $data = $this->db->get('course_subject_master')->result_array();
         echo json_encode($data);
     }

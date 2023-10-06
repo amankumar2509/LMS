@@ -21,6 +21,10 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 
+        
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <title>User Page</title>
 
     <style>
@@ -245,32 +249,87 @@
         $(document).ready(function () {
             //  var selectedOption = $(this).val();
 
-            $.ajax({
-                url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-                method: 'POST',
-                dataType: 'json',
-                success: function (data) {
 
-                    if (data && data.length > 0) {
-                        $('#first_dropdown').empty();
-                        $('#first_dropdown').append('<option value="">Please Select Subject</option>');
 
-                        $.each(data, function (index, subject) {
-                            $('#first_dropdown').append($('<option>', {
-                                value: subject.id,
-                                text: subject.name
-                            }));
-                        });
-                    } else {
-                        $('#first_dropdown').empty();
-                        $('#first_dropdown').append('<option value="">No subjects found</option>');
-                    }
-                },
-                error: function () {
-                    // Handle AJAX error here
-                    alert("An error occurred while fetching subjects.");
-                }
-            });
+        //     $('#first_dropdown').select2({
+           
+        //     theme: "classic",
+        //     width: 'resolve',
+        //     allowClear: true,
+        //     // ajax: {
+        //     //     url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+        //     //     method: 'POST',
+        //     //     dataType: 'json',
+        //     //     success: function (data) {
+
+        //     //         if (data && data.length > 0) {
+        //     //             $('#first_dropdown').empty();
+        //     //             $('#first_dropdown').append('<option value="">Please Select Subject</option>');
+
+        //     //             $.each(data, function (index, subject) {
+        //     //                 $('#first_dropdown').append($('<option>', {
+        //     //                     value: subject.id,
+        //     //                     text: subject.name
+        //     //                 }));
+        //     //             });
+        //     //         } else {
+        //     //             $('#first_dropdown').empty();
+        //     //             $('#first_dropdown').append('<option value="">No subjects found</option>');
+        //     //         }
+        //     //     },
+        //     //     error: function () {
+        //     //         // Handle AJAX error here
+        //     //         alert("An error occurred while fetching subjects.");
+        //     //     }
+        //     // }
+            
+
+
+        // });
+         // ajax: {
+            //         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+            //         dataType: 'json',
+            //         delay: 2000,
+            //         method: 'POST',
+            //         processResults: function(data) {
+            //             if (data.length > 0) {
+            //                 return {
+            //                     results: data
+            //                 };
+            //             }
+            //         },
+            //         cache: true
+            //     }
+        $('#first_dropdown').select2({
+    theme: "classic",
+    width: 'resolve',
+    allowClear: true,
+    ajax: {
+        url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+        method: 'POST',
+        dataType: 'json',
+        processResults: function (data) {
+            if (data && data.length > 0) {
+                return {
+                    results: data.map(function (subject) {
+                        return {
+                            id: subject.id,
+                            text: subject.name
+                        };
+                    })
+                };
+            } else {
+                return {
+                    results: []
+                };
+            }
+        },
+        cache: true
+    }
+});
+
+         
+            
 
 
             $('#first_dropdown').on('change', function () {
@@ -293,6 +352,7 @@
                                     value: topic.id,
                                     text: topic.topic
                                 }));
+                
                             });
                         } else {
                             // Handle the case when no topics are found
@@ -304,6 +364,9 @@
                         // Handle AJAX error here
                         alert("An error occurred while fetching topics.");
                     }
+                });
+                $('#second_dropdown').select2({
+
                 });
             });
 
@@ -383,7 +446,7 @@
             //     var top = $("#second_dropdown").val();
             //     var sub = $("#first_dropdown").val();
             //     $.ajax({
-            //         url: '<?php echo base_url('form_Controller/get_csv'); ?>',
+            //         url: '',
             //         method: 'POST',
             //         data: {
             //             "topic_id": top,
