@@ -117,7 +117,7 @@ class Form_controller extends CI_Controller
     {
         
         $this->load->database();
-        $this->db->select('id,name');
+        $this->db->select('id,name,image');
        
         $data = $this->db->get('course_subject_master')->result_array();
         echo json_encode($data);
@@ -226,7 +226,7 @@ class Form_controller extends CI_Controller
         // $filename = 'users_'.date('Ymd').'.csv';
         // Set headers for CSV download
         //$usersData = $this->form_model->csvModel();
-        $this->db->select('question, option_1, option_2, option_3, option_4, answer');
+        $this->db->select('question, option_1, option_2, option_3, option_4, answer,description');
         $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
 
         $usersData = $q->result_array();
@@ -244,7 +244,7 @@ class Form_controller extends CI_Controller
         $file = fopen('php://output', 'w');
         fputs($file, "\xEF\xBB\xBF");
         // Output the CSV column headers
-        $header = array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer');
+        $header = array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer','description');
 
         fputcsv($file, $header);
 
@@ -262,7 +262,10 @@ class Form_controller extends CI_Controller
             $nestedDataCSV[] = strip_tags($line['option_3']);
             $nestedDataCSV[] = strip_tags($line['option_4']);
             $nestedDataCSV[] = strip_tags($line['answer']);
-
+            // $nestedDataCSV[] = strip_tags($line['description']);
+            $description = htmlspecialchars_decode(strip_tags($line['description']), ENT_QUOTES | ENT_HTML5);
+            $description = str_replace('&nbsp;', "\xC2\xA0", $description);
+            $nestedDataCSV[] = $description;
             fputcsv($file, $nestedDataCSV);
         }
         // Close the file pointer
@@ -277,7 +280,7 @@ class Form_controller extends CI_Controller
     public function get_word($sub, $top,$lang)
     {
         $this->load->database();
-        $this->db->select('question, option_1, option_2, option_3, option_4, answer');
+        $this->db->select('question, option_1, option_2, option_3, option_4, answer, description');
 
         $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
         $usersData = $q->result_array();
@@ -311,7 +314,9 @@ class Form_controller extends CI_Controller
             $content .= 'Option_2: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_2']));
             $content .= 'Option_3: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_3']));
             $content .= 'Option_4: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_4'])) . PHP_EOL;
-            $content .= 'Answer: ' . preg_replace('/[,"]+/', '', strip_tags($line['answer'])) . PHP_EOL . PHP_EOL;
+            $content .= 'Answer: ' . preg_replace('/[,"]+/', '', strip_tags($line['answer'])) . PHP_EOL;
+            // $content .= 'Solution: ' . preg_replace('/[,"]+/', '', strip_tags($line['description'])) . PHP_EOL . PHP_EOL;
+            $content .= 'Description: ' . str_replace('&nbsp;', "\xC2\xA0", htmlspecialchars_decode(strip_tags($line['description']), ENT_QUOTES | ENT_HTML5)) . PHP_EOL . PHP_EOL;
 
             fwrite($file, $content);
         }

@@ -21,9 +21,9 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 
-        
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <title>User Page</title>
 
@@ -136,8 +136,9 @@
         .download-button:hover {
             background-color: #286090;
         }
-        #Dword{
-            float:right;
+
+        #Dword {
+            float: right;
             margin-right: 392px;
             margin-top: -46px;
 
@@ -160,6 +161,10 @@
 
         #logout:hover {
             background-color: #286090;
+        }
+
+        .img-icon {
+            width: 20px;
         }
     </style>
 </head>
@@ -251,7 +256,7 @@
 
 
 
-            
+
             $.ajax({
                 url: '<?php echo base_url('form_controller/getSubjects'); ?>',
                 method: 'POST',
@@ -273,32 +278,56 @@
                     //     $('#first_dropdown').append('<option value="">No subjects found</option>');
                     // }
                     if (data != 0) {
-            var option = "";
-            // Populate the first dropdown with fetched subjects
-            $.each(data, function (index, subject) {
-                option += `<option value="${subject.id}">${subject.id}. ${subject.name}</option>`;
-            });
-            $('#first_dropdown').append(option);
+                        var option = "";
+                        // Populate the first dropdown with fetched subjects
+                        $.each(data, function (index, subject) {
+                            // option += `<option value="${subject.id}">${subject.id}. ${subject.name}</option>`;
+                            option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
+                        });
+                        $('#first_dropdown').append(option);
 
-            // Initialize select2 with image support
-            $("#first_dropdown").select2({
-                theme: "classic",
-                // templateResult: formatOption
-            });
-        } else {
-            // Handle the case when no subjects are found
-            alert("No subjects found");
-        }
-    },
-    error: function () {
-        // Handle AJAX error here
-        alert("An error occurred while fetching subjects.");
-    }
-            });
-//             $('#first_dropdown').select2({
 
-// });
-         // ajax: {
+                        $("#first_dropdown").select2({
+                            theme: "classic",
+                            templateResult: showImage
+                        });
+                    } else {
+                        // Handle the case when no subjects are found
+                        alert("No subjects found");
+                    }
+                },
+                error: function () {
+                    // Handle AJAX error here
+                    alert("An error occurred while fetching subjects.");
+                }
+            });
+            // function showImage(state) {
+            //     if (!state.id) {
+            //         return state.text;
+            //     }
+            //     var subjectImage = $(state.element).data('img');
+            //     if (!subjectImage) {
+            //         return state.text;
+            //     }
+            //     return $(
+            //         '<span><img src="' + subjectImage + '" class="img-icon" /> ' + state.text + '</span>'
+            //     );
+            // }
+
+            function showImage(option) {
+                if (!option.id) {
+                    return option.text;
+                }
+
+                var $option = $(
+                    `<span><img src="${$(option.element).data('img')}" class="img-icon" /> ${option.text}</span>`
+                );
+
+                return $option;
+            }
+
+
+            // ajax: {
             //         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
             //         dataType: 'json',
             //         delay: 2000,
@@ -312,41 +341,41 @@
             //         },
             //         cache: true
             //     }
-//         $('#first_dropdown').select2({
-//     theme: "classic",
-//     width: 'resolve',
-//     allowClear: true,
-//     ajax: {
-//         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-//         method: 'POST',
-//         dataType: 'json',
-//         data: function (params) {
-//             return {
-//                 search: params.term // Send the user's input as 'search' parameter
-//             };
-//         },
-//         processResults: function (data) {
-//             if (data && data.length > 0) {
-//                 return {
-//                     results: data.map(function (subject) {
-//                         return {
-//                             id: subject.id,
-//                             text: subject.name
-//                         };
-//                     })
-//                 };
-//             } else {
-//                 return {
-//                     results: []
-//                 };
-//             }
-//         },
-//         cache: true
-//     }
-// });
+            //         $('#first_dropdown').select2({
+            //     theme: "classic",
+            //     width: 'resolve',
+            //     allowClear: true,
+            //     ajax: {
+            //         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+            //         method: 'POST',
+            //         dataType: 'json',
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term // Send the user's input as 'search' parameter
+            //             };
+            //         },
+            //         processResults: function (data) {
+            //             if (data && data.length > 0) {
+            //                 return {
+            //                     results: data.map(function (subject) {
+            //                         return {
+            //                             id: subject.id,
+            //                             text: subject.name
+            //                         };
+            //                     })
+            //                 };
+            //             } else {
+            //                 return {
+            //                     results: []
+            //                 };
+            //             }
+            //         },
+            //         cache: true
+            //     }
+            // });
 
-         
-            
+
+
 
 
             $('#first_dropdown').on('change', function () {
@@ -369,7 +398,7 @@
                                     value: topic.id,
                                     text: topic.topic
                                 }));
-                
+
                             });
                         } else {
                             // Handle the case when no topics are found
@@ -424,30 +453,28 @@
                             if (data.length == 0) {
                                 data: [];
                             }
-                                var table = $('#user_data').DataTable({
-                                    "bDestroy": true,
-                                    dom: 'lBftrip',
-                                    buttons: [
-                                        'pdf'
+                            var table = $('#user_data').DataTable({
 
-                                    ],
-                                    data: data,
-                                    columns: [
-                                        // { data: 'question' },
-                                        // { data: 'option_1' }, 
-                                        // { data: 'option_2' }, 
-                                        // { data: 'option_3' },
-                                        // { data: 'option_4' }  
-                                        { data: 'question', title: 'Question' },
-                                        { data: 'option1', title: 'Option' },
-                                        { data: 'option2', title: 'Option' },
-                                        { data: 'option3', title: 'Option' },
-                                        { data: 'option4', title: 'Option' },
-                                        { data: 'answer', title: 'Answer' }
-                                    ],
-                                    order: [0] //sort first column (question)
-                                });
-                            
+                                "paging": true,
+                                "lengthMenu": [[1, 2, 3, 4, 25, 50, -1], [1, 2, 3, 4, 25, 50, 'All']],
+                                "bDestroy": true,
+                                data: data,
+                                columns: [
+                                    // { data: 'question' },
+                                    // { data: 'option_1' }, 
+                                    // { data: 'option_2' }, 
+                                    // { data: 'option_3' },
+                                    // { data: 'option_4' }  
+                                    { data: 'question', title: 'Question' },
+                                    { data: 'option1', title: 'Option' },
+                                    { data: 'option2', title: 'Option' },
+                                    { data: 'option3', title: 'Option' },
+                                    { data: 'option4', title: 'Option' },
+                                    { data: 'answer', title: 'Answer' }
+                                ],
+                                order: [0] //sort first column (question)
+                            });
+
 
 
                         },
