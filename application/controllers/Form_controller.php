@@ -99,10 +99,10 @@ class Form_controller extends CI_Controller
     // public function getSubjects()
     // {
     //     $searchTerm = $this->input->post('search');
-    //     if (is_numeric($searchTerm) == '1')
-    //         $this->db->where('id', $searchTerm);
-    //     else
-    //         $this->db->where('name', $searchTerm);
+    //    
+    //        
+    //    
+    //         $this->db->where('id, name', $searchTerm);
 
 
     //     $this->load->database();
@@ -113,39 +113,40 @@ class Form_controller extends CI_Controller
     // //     
 
     
+    // public function getSubjects()
+    // {
+        
+    //     $this->load->database();
+       
+    //     $this->db->select('id,name,image');
+       
+    //     $data = $this->db->get('course_subject_master')->result_array();
+    //     echo json_encode($data);
+    // }
+
+
+
+    
     public function getSubjects()
     {
-        
         $this->load->database();
-        $this->db->select('id,name,image');
-       
+    
+        $searchTerm = $this->input->post('search'); 
+    
+        $this->db->select('id, name, image'); 
+        $this->db->limit(30);
+        if (!empty($searchTerm)) {
+            
+            $this->db->like('name', $searchTerm, 'both'); // 'both' means search for the term anywhere in the 'name' field
+        }
+    
         $data = $this->db->get('course_subject_master')->result_array();
+    
+        
+    
         echo json_encode($data);
     }
-//     public function getSubjects()
-// {
-//     $this->load->database();
-
-//     $searchTerm = $this->input->post('search'); // Get the user's search input
-
-//     $this->db->select('id, name');
     
-//     if (!empty($searchTerm)) {
-//         // If a search term is provided, filter the results
-//         $this->db->like('name', $searchTerm, 'both'); // 'both' means search for the term anywhere in the 'name' field
-//     }
-
-//     $data = $this->db->get('course_subject_master')->result_array();
-
-//     if (empty($searchTerm)) {
-//         $this->db->select('id, name');
-//         // If no search term is provided, retrieve all results
-//         $data = $this->db->get('course_subject_master')->result_array();
-//     }
-    
-
-//     echo json_encode($data);
-// }
 
 
 

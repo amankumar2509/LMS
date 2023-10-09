@@ -257,74 +257,63 @@
 
 
 
-            $.ajax({
-                url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-                method: 'POST',
-                dataType: 'json',
-                success: function (data) {
+            // $.ajax({
+            //     url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+            //     method: 'POST',
+            //     dataType: 'json',
+            //     success: function (data) {
 
-                    // if (data && data.length > 0) {
-                    //     $('#first_dropdown').empty();
-                    //     $('#first_dropdown').append('<option value="">Please Select Subject</option>');
+            //         // if (data && data.length > 0) {
+            //         //     $('#first_dropdown').empty();
+            //         //     $('#first_dropdown').append('<option value="">Please Select Subject</option>');
 
-                    //     $.each(data, function (index, subject) {
-                    //         $('#first_dropdown').append($('<option>', {
-                    //             value: subject.id,
-                    //             text: subject.name
-                    //         }));
-                    //     });
-                    // } else {
-                    //     $('#first_dropdown').empty();
-                    //     $('#first_dropdown').append('<option value="">No subjects found</option>');
-                    // }
-                    if (data != 0) {
-                        var option = "";
-                        // Populate the first dropdown with fetched subjects
-                        $.each(data, function (index, subject) {
-                            // option += `<option value="${subject.id}">${subject.id}. ${subject.name}</option>`;
-                            option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
-                        });
-                        $('#first_dropdown').append(option);
+            //         //     $.each(data, function (index, subject) {
+            //         //         $('#first_dropdown').append($('<option>', {
+            //         //             value: subject.id,
+            //         //             text: subject.name
+            //         //         }));
+            //         //     });
+            //         // } else {
+            //         //     $('#first_dropdown').empty();
+            //         //     $('#first_dropdown').append('<option value="">No subjects found</option>');
+            //         // }
+            //         if (data != 0) {
+            //             var option = "";
+            //             // Populate the first dropdown with fetched subjects
+            //             $.each(data, function (index, subject) {
+            //                 // option += `<option value="${subject.id}">${subject.id}. ${subject.name}</option>`;
+            //                 option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
+            //             });
+            //             $('#first_dropdown').append(option);
 
 
-                        $("#first_dropdown").select2({
-                            theme: "classic",
-                            templateResult: showImage
-                        });
-                    } else {
-                        // Handle the case when no subjects are found
-                        alert("No subjects found");
-                    }
-                },
-                error: function () {
-                    // Handle AJAX error here
-                    alert("An error occurred while fetching subjects.");
-                }
-            });
-            // function showImage(state) {
-            //     if (!state.id) {
-            //         return state.text;
+            //             $("#first_dropdown").select2({
+            //                 theme: "classic",
+            //                 templateResult: showImage
+            //             });
+            //         } else {
+            //             // Handle the case when no subjects are found
+            //             alert("No subjects found");
+            //         }
+            //     },
+            //     error: function () {
+            //         // Handle AJAX error here
+            //         alert("An error occurred while fetching subjects.");
             //     }
-            //     var subjectImage = $(state.element).data('img');
-            //     if (!subjectImage) {
-            //         return state.text;
+            // });
+
+
+            // function showImage(option) {
+            //     if (!option.id) {
+            //         return option.text;
             //     }
-            //     return $(
-            //         '<span><img src="' + subjectImage + '" class="img-icon" /> ' + state.text + '</span>'
+
+            //     var $option = $(
+            //         `<span><img src="${$(option.element).data('img')}" class="img-icon" /> ${option.text}</span>`
             //     );
+
+            //     return $option;
             // }
-
-            function showImage(option) {
-                if (!option.id) {
-                    return option.text;
-                }
-
-                var $option = $(
-                    `<span><img src="${$(option.element).data('img')}" class="img-icon" /> ${option.text}</span>`
-                );
-
-                return $option;
-            }
 
 
             // ajax: {
@@ -341,38 +330,56 @@
             //         },
             //         cache: true
             //     }
-            //         $('#first_dropdown').select2({
-            //     theme: "classic",
-            //     width: 'resolve',
-            //     allowClear: true,
-            //     ajax: {
-            //         url: '<?php echo base_url('form_controller/getSubjects'); ?>',
-            //         method: 'POST',
-            //         dataType: 'json',
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term // Send the user's input as 'search' parameter
-            //             };
-            //         },
-            //         processResults: function (data) {
-            //             if (data && data.length > 0) {
-            //                 return {
-            //                     results: data.map(function (subject) {
-            //                         return {
-            //                             id: subject.id,
-            //                             text: subject.name
-            //                         };
-            //                     })
-            //                 };
-            //             } else {
-            //                 return {
-            //                     results: []
-            //                 };
-            //             }
-            //         },
-            //         cache: true
-            //     }
-            // });
+            $('#first_dropdown').select2({
+                theme: "classic",
+                width: 'resolve',
+                allowClear: true,
+                templateResult: showImage,
+
+                ajax: {
+                    url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            search: params.term // Send the user's input as 'search' parameter
+                        };
+                    },
+                    processResults: function (data) {
+                        if (data && data.length > 0) {
+                            return {
+                                results: data.map(function (subject) {
+                                    return {
+                                        id: subject.id,
+                                        text: subject.name,
+                                        image: subject.image
+                                    };
+                                })
+                            };
+                        } else {
+                            return {
+                                results: []
+                            };
+                        }
+                    },
+                    cache: true
+                }
+            });
+            function showImage(option) {
+                if (!option.id) {
+                    return option.text;
+                }
+
+                // Use option.image to extract the image URL
+                var imageUrl = option.image;
+
+                var $option = $(
+                    `<span><img src="${imageUrl}" class="img-icon" /> ${option.text}</span>`
+                );
+
+                return $option;
+            }
+
 
 
 
