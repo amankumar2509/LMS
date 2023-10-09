@@ -31,7 +31,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('your-background-image.jpg');
+            
             background-size: cover;
             font-family: Arial, sans-serif;
         }
@@ -374,7 +374,7 @@
                 var imageUrl = option.image;
 
                 var $option = $(
-                    `<span><img src="${imageUrl}" class="img-icon" /> ${option.text}</span>`
+                    `<span><img src="${imageUrl}" class="img-icon" />${option.id}. ${option.text}</span>`
                 );
 
                 return $option;
