@@ -134,7 +134,7 @@ class Form_controller extends CI_Controller
         $searchTerm = $this->input->post('search'); 
     
         $this->db->select('id, name, image'); 
-        $this->db->limit(3);
+        $this->db->limit(20);
         // if (!empty($searchTerm)) {
             
         //     $this->db->like('name', $searchTerm, 'both'); // 'both' means search for the term anywhere in the 'name' field
@@ -142,14 +142,18 @@ class Form_controller extends CI_Controller
         // }
         if (!empty($searchTerm)) {
             $this->db->group_start();
-            $this->db->like('name', $searchTerm, 'both');//'both' means search for the term anywhere in the 'name' field
-            $this->db->or_like('id', $searchTerm, 'both');
+            if(is_numeric($searchTerm)){
+            $this->db->like('id', $searchTerm,'after');
+            }
+            else{
+            $this->db->like('name', $searchTerm, 'after');
+            }//'both' means search for the term anywhere in the 'name' field
             $this->db->group_end();
         }
     
         $data = $this->db->get('course_subject_master')->result_array();
     
-        
+        // print($this->db->last_query());die;
     
         echo json_encode($data);
     }

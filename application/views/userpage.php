@@ -335,6 +335,7 @@
                 width: 'resolve',
                 allowClear: true,
                 templateResult: showImage,
+                
 
                 ajax: {
                     url: '<?php echo base_url('form_controller/getSubjects'); ?>',
