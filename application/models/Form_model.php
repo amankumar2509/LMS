@@ -14,28 +14,29 @@ class Form_model extends CI_Model {
             return false; 
         }
     }
-    public function checkLogin($email,$password){
-        $query=$this->db->get_where('users',array('email'=>$email,'password'=>$password));
-        if($query->num_rows()>0){
-            return true;
-        }else{
-            return false;
-        }
+    // public function checkLogin($email,$password){
+    //     $query=$this->db->get_where('users',array('email'=>$email,'password'=>$password));
+    //     if($query->num_rows()>0){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
        
-    } 
-    // public function csvModel(){
-    //      $sub = $this->input->post('subject_id');
-    //      $top = $this->input->post('topic_id');
-        
-    //     $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-       
-       
-        
-    //     $q = $this->db->get_where('course_question_bank_master',['subject_id'=>$sub,'topic_id'=>$top]);
-        
-    //     $response= $q->result_array();
-    //     return $response;
-    // }
+    // } 
+
+  public function checkLogin($email, $password)
+{
+    $query = $this->db->get_where('users', array('email' => $email, 'password' => $password));
+
+    if ($query->num_rows() > 0) {
+        $user = $query->row(); // Get the user data
+        return $user; // Return the user data
+    } else {
+        return false;
+    }
+}
+
+    
     
  }
 ?>

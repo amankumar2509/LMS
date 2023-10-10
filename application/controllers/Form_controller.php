@@ -50,34 +50,75 @@ class Form_controller extends CI_Controller
     {
         $this->load->view('register');
     }
+    // public function ajax_login()
+    // {
+    //     if ($this->input->post()) {
+
+    //         $email = $this->input->post('email');
+    //         $password = $this->input->post('password');
+    //         $result = $this->form_model->checkLogin($email, $password);
+    //         if ($result) {
+    //             $this->session->set_userdata('logged_in', true);
+    //             echo json_encode(['data' => 'true', 'url' => base_url('form_controller/userpage')]);
+    //         } else {
+    //             echo json_encode(['data' => 'false']);
+
+    //         }
+    //     }
+
+
+
+    // }
     public function ajax_login()
     {
         if ($this->input->post()) {
-
             $email = $this->input->post('email');
             $password = $this->input->post('password');
-            $result = $this->form_model->checkLogin($email, $password);
-            if ($result) {
-                $this->session->set_userdata('logged_in', true);
-                echo json_encode(['data' => 'true', 'url' => base_url('form_controller/userpage')]);
+            $user = $this->form_model->checkLogin($email, $password);
+
+            if ($user) {
+                if ($user->status == 1) {
+                    // User is an admin
+                    $this->session->set_userdata('logged_in', true);
+                    $this->session->set_userdata('user_role', 'admin');
+                    echo json_encode(['data' => 'true', 'url' => base_url('form_controller/adminpage')]);
+                } else {
+                    // User is a regular user
+                    $this->session->set_userdata('logged_in', true);
+                    $this->session->set_userdata('user_role', 'user');
+                    echo json_encode(['data' => 'true', 'url' => base_url('form_controller/userpage')]);
+                }
             } else {
                 echo json_encode(['data' => 'false']);
-
             }
         }
-
-
-
     }
+
+
+    // public function login()
+    // {
+    //     if ($this->session->userdata('logged_in')) {
+    //         redirect('form_controller/userpage');
+    //     } else {
+    //         $this->load->view('login');
+    //         // $this->ajax_login();
+    //     }
+    // }
     public function login()
     {
         if ($this->session->userdata('logged_in')) {
-            redirect('form_controller/userpage');
+            $user_role = $this->session->userdata('user_role');
+            if ($user_role == 'admin') {
+                redirect('form_controller/adminpage');
+            } else {
+                redirect('form_controller/userpage');
+            }
         } else {
             $this->load->view('login');
-            // $this->ajax_login();
         }
     }
+
+
 
     public function userpage()
     {
@@ -112,52 +153,63 @@ class Form_controller extends CI_Controller
     // }
     // //     
 
-    
+
     // public function getSubjects()
     // {
-        
+
     //     $this->load->database();
-       
+
     //     $this->db->select('id,name,image');
-       
+
     //     $data = $this->db->get('course_subject_master')->result_array();
     //     echo json_encode($data);
     // }
 
 
+    public function adminpage()
+{  
+    $this->load->view('adminpage');
 
     
+}
+public function ajax_getAdmindata(){
+    $this->load->database();
+    $data=$this->db->get('users')->result();
+    //echo json_encode($data);
+    echo json_encode(['data' => $data]);
+}
+
+
     public function getSubjects()
     {
         $this->load->database();
-    
-        $searchTerm = $this->input->post('search'); 
-    
-        $this->db->select('id, name, image'); 
+
+        $searchTerm = $this->input->post('search');
+
+        $this->db->select('id, name, image');
         $this->db->limit(20);
         // if (!empty($searchTerm)) {
-            
+
         //     $this->db->like('name', $searchTerm, 'both'); // 'both' means search for the term anywhere in the 'name' field
         //     $this->db->like('id', $searchTerm, 'both'); 
         // }
         if (!empty($searchTerm)) {
             $this->db->group_start();
-            if(is_numeric($searchTerm)){
-            $this->db->like('id', $searchTerm,'after');
-            }
-            else{
-            $this->db->like('name', $searchTerm, 'after');
-            }//'both' means search for the term anywhere in the 'name' field
+            if (is_numeric($searchTerm)) {
+                $this->db->like('id', $searchTerm, 'after');
+            } else {
+                $this->db->like('name', $searchTerm, 'after');
+            } //'both' means search for the term anywhere in the 'name' field
             $this->db->group_end();
         }
-    
+
         $data = $this->db->get('course_subject_master')->result_array();
-    
+
         // print($this->db->last_query());die;
-    
+
         echo json_encode($data);
     }
-    
+
 
 
 
@@ -209,7 +261,7 @@ class Form_controller extends CI_Controller
             'answer '
         ]);
 
-        $this->db->where(['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
+        $this->db->where(['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang]);
 
         $data = $this->db->get('course_question_bank_master')->result_array();
 
@@ -219,7 +271,7 @@ class Form_controller extends CI_Controller
     }
 
 
-    public function get_csv($sub, $top,$lang)
+    public function get_csv($sub, $top, $lang)
     {
         $this->load->database();
         // $this->load->model('form_model');
@@ -239,7 +291,7 @@ class Form_controller extends CI_Controller
         // Set headers for CSV download
         //$usersData = $this->form_model->csvModel();
         $this->db->select('question, option_1, option_2, option_3, option_4, answer,description');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang]);
 
         $usersData = $q->result_array();
 
@@ -256,7 +308,7 @@ class Form_controller extends CI_Controller
         $file = fopen('php://output', 'w');
         fputs($file, "\xEF\xBB\xBF");
         // Output the CSV column headers
-        $header = array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer','description');
+        $header = array('question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer', 'description');
 
         fputcsv($file, $header);
 
@@ -289,12 +341,12 @@ class Form_controller extends CI_Controller
 
 
     }
-    public function get_word($sub, $top,$lang)
+    public function get_word($sub, $top, $lang)
     {
         $this->load->database();
         $this->db->select('question, option_1, option_2, option_3, option_4, answer, description');
 
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top,'lang_code'=>$lang]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang]);
         $usersData = $q->result_array();
 
 

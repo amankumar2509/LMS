@@ -10,6 +10,10 @@
         
         
     //    }
+    public function get_users(){
+        return $this->db->get('users')->result_array();
+ 
+     }
       
         
     }

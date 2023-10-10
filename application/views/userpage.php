@@ -174,7 +174,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h1>Welcome to Admin Page</h1>
+                    <h1>Welcome to Student Page</h1>
                 </div>
                 <div class="col-md-6" id="logout">
                     <a href="<?php echo base_url('form_controller/logout'); ?>" class=".logout-button">Logout</a>
