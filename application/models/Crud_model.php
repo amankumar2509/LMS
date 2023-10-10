@@ -10,11 +10,15 @@
         
         
     //    }
-    public function get_users(){
-        return $this->db->get('users')->result_array();
- 
-     }
+    public function deleteUser($id){
+        $this->db->where('id', $id);
+       $data = $this->db->delete("users");
       
+        return $data;
+
+      
+    }
+    
         
     }
 ?>

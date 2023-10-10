@@ -167,17 +167,18 @@ class Form_controller extends CI_Controller
 
 
     public function adminpage()
-{  
-    $this->load->view('adminpage');
+    {
+        $this->load->view('adminpage');
 
-    
-}
-public function ajax_getAdmindata(){
-    $this->load->database();
-    $data=$this->db->get('users')->result();
-    //echo json_encode($data);
-    echo json_encode(['data' => $data]);
-}
+
+    }
+    public function ajax_getAdmindata()
+    {
+        $this->load->database();
+        $data = $this->db->get('users')->result();
+        //echo json_encode($data);
+        echo json_encode(['data' => $data]);
+    }
 
 
     public function getSubjects()
@@ -388,6 +389,41 @@ public function ajax_getAdmindata(){
         exit;
 
 
+    }
+    public function deleteData()
+    {
+        $this->load->model('Crud_model');
+        // print_r($_POST);die;
+        $id = $_POST['id'];
+        $response = $this->crud_model->deleteUser($id);
+        if ($response == 1) {
+            echo 1;
+        } else {
+            echo 2;
+        }
+    }
+    public function updateInfo()
+    {
+        $id = $_POST['id'];
+        // print_r($id);
+        $data = $this->db->get_where('users', ['id' => $id])->row_array();
+        // print_r($data);die;
+        echo json_encode($data);
+    }
+    public function infoChange()
+    {
+        $id = $_POST['id'];
+        $data = array(
+            'name' => $_POST['name'],
+            'email' => $_POST['email']
+        );
+        $this->db->where('id', $id);
+        $update = $this->db->update('users', $data);
+        if ($update) {
+            echo 1;
+        } else {
+            echo 0;
+        }
     }
 
 }

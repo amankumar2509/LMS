@@ -1,142 +1,195 @@
-<!-- views/admin/index.php -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>
-        <?php ?>
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+
     <!-- Include DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Include Bootstrap CSS (if not already included) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include DataTables JavaScript -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
-
-    <div class="container">
-
-        <table class="display table table-bordered table-striped" id="all-user-grid" style="width:100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>password</th>
-                    <th>Action</th>
-
-
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <!-- Modal -->
-<!-- Modal -->
-<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Action</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="editFormContainer">
-                    <!-- Edit Form Will Be Loaded Here -->
+    <h1>Welcome to Admin Page</h1>
+    <div class="container box">
+        <div class="table-responsive">
+            <br />
+            <table id="user_data" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th width="35%">Name</th>
+                        <th width="35%">Email</th>
+                        <th width="15%">Edit</th>
+                        <th width="15%">Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Update the Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary save-edit">Edit</button>
-                <button type="button" class="btn btn-danger delete-action">Delete</button>
+
+                <div class="modal-body">
+                    <form id="save" action="">
+                        <div class="container">
+                            <label for="Name">Change the Name: </label>
+                            <input type="text" id="name" name="name"></input>
+                        </div>
+                        <br>
+                        <div class="container">
+                            <!-- <label for="id">Change the Name: </label> -->
+                            <input type="number" id="id" name="id" hidden></input>
+                        </div>
+                        <br>
+                        <div class="container">
+                            <label for="email">Change the Email: </label>
+                            <input type="email" id="email" name="email"></input>
+                        </div>
+                </div>
+
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
 
-
-    </div>
-
-    <!-- Include jQuery and DataTables JavaScript libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <!-- Add a logout button with a link to the logout URL -->
+    <div class="col-md-6" id="logout">
+                    <a href="<?php echo base_url('form_controller/logout'); ?>" class=".logout-button">Logout</a>
+                </div>
 
     <script>
-        // $(document).ready(function () {
-        //     $('#data-table').DataTable({
-        //         "ajax": {
-        //             "url": "<?php echo site_url('form_controller/adminpage'); ?>",
-        //             "type": "POST"
-        //         },
-        //         "columns": [
-        //             {"data": "id"},
-        //             {"data": "name"},
-        //             {"data": "email"},
-        //             {"data": "password"}
-        //         ]
-        //     });
-        // });
-        $(document).ready(function () {
-            var table = 'all-user-grid';
-            var dataTable = jQuery("#" + table).DataTable({
-
+        $(document).ready(function() {
+            $('#exampleModal').hide();
+            // Initialize DataTable
+            var dataTable = $('#user_data').DataTable({
+                "paging": true,
                 "lengthMenu": [
-                    [1, 5, 10, 30],
-                    [1, 5, 10, 30]
+                    [5, 2, 3, 4, 25, 50, 75, 100, -1],
+                    [5, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
-                "order": [
-                    [0, "ASC"]
-                ],
-                "aoColumnDefs": [{
-                    "bSortable": false,
-                    "aTargets": [0, 1, 2, 3]
-                },],
                 "ajax": {
-                    url: "<?php echo base_url('form_controller/ajax_getAdmindata'); ?>", // json datasource
-                    type: "post", // method  , by default get
-                    data: function (d) {
-                        ;
-
-
-                        $("#" + table).find(".search-input-text").each(function () {
-                            if ($(this).val() != "") {
-                                d['columns'][$(this).data("column")]['search']['value'] = $(this).val();
-                            }
-                        });
-                        $("#" + table).find(".search-input-select").each(function () {
-                            if ($(this).val() != "") {
-                                d['columns'][$(this).data("column")]['search']['value'] = $(this).val();
-                            }
-                        });
-                    },
-                    error: function () { // error handling
-                        jQuery("." + table + "-error").html("");
-                        jQuery("#" + table + "_processing").css("display", "none");
-                    }
+                    "url": "<?php echo base_url('form_controller/ajax_getAdmindata'); ?>",
+                    "type": "POST"
                 },
-                "columns": [
-                    { data: 'id' },
-                    { data: 'name' },
-                    { data: 'email' },
-                    { data: 'password' },
+                "columns": [{
+                        "data": "name"
+                    },
                     {
-                        data: null,
-                        render: function (data, type, full, meta) {
-                            var rowId = full.id; // Assuming 'id' is the unique identifier in your data
-                            return '<button class="btn btn-primary btn-sm action-button" data-toggle="modal" data-target="#actionModal" data-rowid="' + rowId + '">Action</button>';
+                        "data": "email"
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button class="btn btn-info edit-btn" onclick="modalopen(' + data.id + ')" data-id="' + data.id + '">Edit</button>';
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button class="btn btn-danger delete-btn" onclick="deleterec(' + data.id + ')" data-id="' + data.id + '">Delete</button>';
                         }
                     }
-
-
                 ]
             });
 
+        });
+        $(".close").click(function() {
+            $('#exampleModal').hide();
+        })
 
-            
+        function modalopen(id) {
+            $('#exampleModal').show();
+            $.ajax({
+                url: '<?php echo base_url('form_controller/updateInfo'); ?>',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    //console.log(data);
+                    $('#name').val(data.name);
+                    $('#email').val(data.email);
+                    $('#id').val(data.id);
+
+                },
+                error: function() {
+                    // Handle AJAX error here
+                    alert("An error occurred while fetching topics.");
+                }
+            });
+
+        }
+
+        function deleterec(id) {
+            $.ajax({
+                url: '<?php echo base_url('form_controller/deleteData'); ?>',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data == 1) {
+                        alert('deleted succesfully');
+                        var table = $('#user_data').DataTable();
+                        table.ajax.reload();
+                    } else {
+                        alert('not deleted');
+                    }
+                },
+                error: function() {
+                    // Handle AJAX error here
+                    alert("An error occurred.");
+                }
+            });
+        }
+        $(document).ready(function() {
+            $("#save").submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>form_controller/infoChange",
+                    dataType: "json",
+                    data: formData,
+                    success: function(res) {
+                        if (res == 1) {
+
+                            $('#exampleModal').hide();
+                            var table = $('#user_data').DataTable();
+                            table.ajax.reload();
+                            alert("Data updated Successfully");
+                        } else {
+
+                            $('#exampleModal').hide();
+                            alert("Data did not update");
+                        }
+                    }
+
+                });
+            });
         });
     </script>
 </body>
