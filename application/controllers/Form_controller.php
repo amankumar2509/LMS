@@ -17,6 +17,10 @@ class Form_controller extends CI_Controller
 
     }
 
+    public function index(){
+         $this->load->view('template/users-profile');
+    }
+
     public function ajax_process_registration()
     {
         $this->form_validation->set_rules('name', 'name', 'required');
