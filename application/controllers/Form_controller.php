@@ -17,8 +17,9 @@ class Form_controller extends CI_Controller
 
     }
 
-    public function index(){
-         $this->load->view('template/users-profile');
+    public function index()
+    {
+        $this->load->view('template/users-profile');
     }
 
     public function ajax_process_registration()
@@ -429,6 +430,43 @@ class Form_controller extends CI_Controller
             echo 0;
         }
     }
+    public function addQuestion()
+    {
+        $this->load->view('question');
+    }
+    // public function ajax_addQuestion(){
+    //     $this->load->model('Crud_model');
+    // }
+
+
+    public function ajax_addQuestion()
+    {
+        // Handle the AJAX request here
+        if ($this->input->is_ajax_request()) {
+            // Get the posted data
+            $data = $this->input->post('questionData');
+
+            // You should add some validation and security checks here
+
+            // Load your model to interact with the database
+            $this->load->model('Crud_model');
+
+            // Call the model function to add the question
+            $result = $this->Crud_model->addQuestion($data);
+
+            if ($result) {
+                echo json_encode(array('success' => true));
+            } else {
+                echo json_encode(array('success' => false));
+            }
+        } else {
+            // Handle non-AJAX requests differently
+            show_404(); // Or any other appropriate response
+        }
+    }
+
+
+
 
 }
 

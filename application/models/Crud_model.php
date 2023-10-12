@@ -19,6 +19,11 @@
       
     }
     
+
+    public function addQuestion(){
+        $inserted=$this->db->insert('course_question_bank_master',$data);
+        return $inserted;
+    }
         
     }
 ?>
