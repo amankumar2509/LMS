@@ -1,0 +1,39 @@
+	1	id Primary	int(11)			
+	2	config_id	varchar(25)		
+	3	question	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	4	stream_id	tinytext	utf8_general_ci		No	None			Change Change	Drop Drop	
+	5	sub_stream_id	tinytext	utf8_general_ci		No	None			Change Change	Drop Drop	
+	6	subject_id Index	int(11)			No	None			Change Change	Drop Drop	
+	7	topic_id Index	int(11)			No	None			Change Change	Drop Drop	
+	8	description	text	utf8_general_ci		No	None	//solution		Change Change	Drop Drop	
+	9	question_type Index	varchar(10)	utf8_general_ci		No	None	SC=>single choice,MC=>multiple choice,TF=>true-false,FIB-fill in the blank		Change Change	Drop Drop	
+	10	difficulty_level Index	tinyint(4)			No	None			Change Change	Drop Drop	
+	11	option_1	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	12	option_2	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	13	option_3	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	14	option_4	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	15	option_5	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	16	option_6	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	17	option_7	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	18	option_8	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	19	option_9	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	20	option_10	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	21	answer	text	utf8_general_ci		No	None			Change Change	Drop Drop	
+	22	is_verified Index	tinyint(4)			No	None			Change Change	Drop Drop	
+	23	future_verified	bigint(20)			No	None			Change Change	Drop Drop	
+	24	uploaded_by	int(11)			No	None			Change Change	Drop Drop	
+	25	status Index	int(11)			No	None			Change Change	Drop Drop	
+	26	total_attempt	int(11)			No	None			Change Change	Drop Drop	
+	27	total_right	int(11)			No	None			Change Change	Drop Drop	
+	28	total_wrong	int(11)			No	None			Change Change	Drop Drop	
+	29	lang_code Index	int(11)			No	1			Change Change	Drop Drop	
+	30	paragraph_text	longtext	utf8_general_ci		No	None			Change Change	Drop Drop	
+	31	test_name	varchar(255)	utf8_general_ci		No	None			Change Change	Drop Drop	
+	32	screen_type	int(11)			No	None	0=single screen; 1=split screen		Change Change	Drop Drop	
+	33	last_updated	timestamp			No	current_timestamp()		ON UPDATE CURRENT_TIMESTAMP()	Change Change	Drop Drop	
+	34	chapter_id Index	int(11)			No	None			Change Change	Drop Drop	
+	35	unit_id Index	int(11)			No	None			Change Change	Drop Drop	
+	36	sub_topic_id Index	int(11)			No	None			Change Change	Drop Drop	
+	37	class_id Index	int(11)			No	None			Change Change	Drop Drop	
+	38	principle_id	int(11)			No	None			Change Change	Drop Drop	
+	39	is_mcq	tinyint(4)

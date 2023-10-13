@@ -441,28 +441,32 @@ class Form_controller extends CI_Controller
 
     public function ajax_addQuestion()
     {
-        // Handle the AJAX request here
-        if ($this->input->is_ajax_request()) {
-            // Get the posted data
-            $data = $this->input->post('questionData');
-
-            // You should add some validation and security checks here
-
-            // Load your model to interact with the database
+        // Handle the AJAX request here]
+         $input = $this->input->post();
+        if ($input) {
+            $data=[
+                'question'=>$input['question'], //right side from db and left side from ajax
+                'topic_id'=>$input['topic'],
+                'subject_id'=>$input['subject'],
+                'answer'=>$input['answer'],
+                'option_1'=>$input['option1'],
+                'option_2'=>$input['option2'],
+                'option_3'=>$input['option3'],
+                'option_4'=>$input['option4'],
+                'lang_code'=>$input['language']
+            ];
             $this->load->model('Crud_model');
-
-            // Call the model function to add the question
+           
             $result = $this->Crud_model->addQuestion($data);
-
+            
             if ($result) {
-                echo json_encode(array('success' => true));
+                echo json_encode(array('status' => true));
             } else {
-                echo json_encode(array('success' => false));
+              //  echo json_encode(array('success' => false));
+              echo json_encode(array('status' => false, 'error' => $this->db->error()));
             }
-        } else {
-            // Handle non-AJAX requests differently
-            show_404(); // Or any other appropriate response
         }
+       
     }
 
 

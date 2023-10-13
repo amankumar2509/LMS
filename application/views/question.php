@@ -263,12 +263,12 @@
                     </select>
                 </div>
             </div>
-            <button type="button" class="btn btn-dark" id="addquest">Add Question</button>
+            <button type="button" class="btn btn-dark" id="addquest" disabled>Add Question</button>
         </form>
         <div id="overlay" style="display: none;"></div>
 
-        <div id="popup-form" class="form-container" style="display: none;">
-            <!-- Your pop-up form content here -->
+       <div id="popup-form" class="form-container" style="display: none;">
+            
             <button id="close-popup">&#x2716</button>
             <h2>Add Question</h2>
             <label for="question">Question:</label>
@@ -284,11 +284,14 @@
             <label for="answer">Answer:</label>
             <input type="text" id="answer" name="answer">
             <label for="language">LangugeID:</label>
-            <input type="text" id="language" name="language">
+            <input type="text" id="language" name="language"> 
 
-            <input type="submit" class="btn btn-success" value="Submit">
+            <input type="submit" class="btn btn-success ques_submit" value="Submit">
 
         </div>
+    
+    
+
 
 
 
@@ -468,6 +471,8 @@
                 // });
 
                 $(document).ready(function () {
+
+                    $("#addquest").prop("disabled", true);
                 // Show the overlay and pop-up form when the "Add Question" button is clicked
                 $("#addquest").on("click", function () {
                     $("#overlay").show();
@@ -479,7 +484,17 @@
                     $("#overlay").hide();
                     $("#popup-form").hide();
                 });
+                $("#language").change(function () {
+        var selectedLanguage = $("#language").val();
+        if (selectedLanguage) {
+            $("#addquest").prop("disabled", false);
+        } else {
+            $("#addquest").prop("disabled", true);
+        }
+    });
+                
                 //get form data
+                $(".ques_submit").click(function(){
                 var questionData = {
                     subject: $('#first_dropdown').val(),
                     topic: $('#second_dropdown').val(),
@@ -494,18 +509,21 @@
                 $.ajax({
                     url: '<?php echo base_url('form_Controller/ajax_addQuestion'); ?>',
                     method: 'POST',
-                    dataType: json,
+                    dataType: 'JSON',
+                    data:questionData,
                     success: function (response) {
-                        closePopupForm();
+                        if(response.status==true){
                         alert("Question added successfully!");
-                    },
-                    error: function () {
-                        alert("an error occured while while adding question");
+                        }
+                        else{
+                            alert('error');
+                        }
                     }
+                    
                 });
             });
 
-
+        })
             });
           
         </script>

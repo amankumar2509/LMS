@@ -20,10 +20,11 @@
     }
     
 
-    public function addQuestion(){
+    public function addQuestion($data){
+
         $inserted=$this->db->insert('course_question_bank_master',$data);
         return $inserted;
     }
-        
+        //INSERT INTO `course_question_bank_master` ( `question`,`subject_id`, `topic_id`,`option_1`, `option_2`, `option_3`, `option_4`,`answer`,`lang_code`) VALUES ('abcd','1', '919','a', 'b', 'c', 'd','2','1');
     }
 ?>
