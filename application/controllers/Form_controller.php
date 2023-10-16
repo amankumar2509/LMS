@@ -33,11 +33,20 @@ class Form_controller extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('register');
         } else {
+            $name=$this->input->post('name');
+            $email=$this->input->post('email');
+            $password=$this->input->post('password');
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
 
             $data = array(
-                'name' => $this->input->post('name'),
-                'email' => $this->input->post('email'),
-                'password' => $this->input->post('password')
+                // 'name' => $this->input->post('name'),
+                // 'email' => $this->input->post('email'),
+                // 'password' => $this->input->post('password')
+                'name'=>$name,
+                'email'=>$email,
+                'password'=>$hashed_password,
+
             );
             // $this->load->model('form_model');
             $return = $this->form_model->insert_user($data);
@@ -446,7 +455,7 @@ class Form_controller extends CI_Controller
          $input = $this->input->post();
         if ($input) {
             $data=[
-                'question'=>$input['question'], //right side from db and left side from ajax
+                'question'=>$input['question'], //right side from ajx and left side from db (mypov)
                 'topic_id'=>$input['topic'],
                 'subject_id'=>$input['subject'],
                 'answer'=>$input['answer'],
@@ -483,6 +492,36 @@ class Form_controller extends CI_Controller
             echo 2;
         }
     }
+    public function updateQuestion()
+    {
+        $id = $_POST['id'];
+        // print_r($id);
+        $data = $this->db->get_where('course_question_bank_master', ['id' => $id])->row_array();
+        
+        echo json_encode($data);
+    }
+
+    public function QuestionChange()
+    {
+        $id = $_POST['id'];
+        $data = [
+            'question' => $_POST['question'],
+            'option_1' => $_POST['option1'],
+            'option_2' => $_POST['option2'],
+            'option_3' => $_POST['option3'],
+            'option_4' => $_POST['option4'],
+             'answer' => $_POST['editanswer']
+        ];
+        $this->db->where('id', $id);
+        $update = $this->db->update('course_question_bank_master', $data);
+        if ($update) {
+            echo 1;
+        } else {
+            //echo 0;
+            echo 'Update Error: ' . print_r($this->db->error(), true);
+        }
+    }
+    
 
 
 

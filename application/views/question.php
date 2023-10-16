@@ -292,6 +292,72 @@
         </div>
 
 
+        <!-- popup form for edit  -->
+        <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Update the Information</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="save" action="">
+                            <div class="container">
+                                <label for="question">Question: </label>
+                                <input type="text" id="editquestion" name="question"></input>
+                            </div>
+                            <br>
+                            <div class="container">
+                                <!-- <label for="id">Change the Name: </label> -->
+                                <input type="number" id="id" name="id" hidden></input>
+                            </div>
+                            <br>
+                            <div class="container">
+                                <label for="option">option1: </label>
+                                <input type="text" id="option1" name="option1"></input>
+                            </div>
+                            <br>
+                            <div class="container">
+                                <label for="option">option2: </label>
+                                <input type="text" id="option2" name="option2"></input>
+                            </div>
+                            <br>
+                            
+                            <div class="container">
+                                <label for="option">option3: </label>
+                                <input type="text" id="option3" name="option3"></input>
+                            </div>
+                            <br>
+                        
+                            <div class="container">
+                                <label for="option">option4: </label>
+                                <input type="text" id="option4" name="option4"></input>
+                            </div>
+                            <br>
+                            <div class="container">
+                                <label for="option">answer: </label>
+                                <input type="text" id="editanswer" name="editanswer"></input>
+                            </div>
+                            <br>
+        
+                            
+                    </div>
+
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
 
 
 
@@ -507,19 +573,15 @@
                 });
 
                 $(document).ready(function () {
-                    $("#search").on("click",function () {
+                    $("#search").on("click", function () {
 
                         var sub = $('#first_dropdown').val();
                         var top = $('#second_dropdown').val();
                         var lang = $("#language").val();
                         var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top + "/" + lang;
-                        $('#download_content_csv').attr('action', hrefa);
-                        $('#download_content_csv').prop('disable', false);
+
 
                         var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top + "/" + lang;
-                        $('#Dword').attr('action', hrefac);
-                        $('#Dword').prop('disable', false);
-
 
                         $.ajax({
                             url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
@@ -568,6 +630,13 @@
                                                 return '<button class="btn btn-danger delete-btn" onclick="deleterec(' + data.id + ')" data-id="' + data.id + '">Delete</button>';
                                             }
                                         },
+                                        {
+                                            title: "Edit",
+                                            "data": null,
+                                            "render": function (data, type, row) {
+                                                return '<button class="btn btn-info edit-btn" onclick="modalopen(' + data.id + ')" data-id="' + data.id + '">Edit</button>';
+                                            }
+                                        },
                                     ],
                                     order: [0] //sort first column (question)
                                 });
@@ -582,7 +651,7 @@
                     })
                 });
 
-                
+
 
 
 
@@ -620,7 +689,7 @@
                             option2: $('#option_2').val(),
                             option3: $('#option_3').val(),
                             option4: $('#option_4').val(),
-                            answer: $('#answer').val()
+                           // answer: $('#answer').val()
                         };
                         $.ajax({
                             url: '<?php echo base_url('form_Controller/ajax_addQuestion'); ?>',
@@ -640,31 +709,89 @@
                     });
 
                 })
-         
+
             });
             function deleterec(id) {
-            $.ajax({
-                url: '<?php echo base_url('form_controller/deleteQuestion'); ?>',
-                method: 'POST',
-                data: {
-                    id: id
-                },
-                dataType: 'json',
-                success: function(data) {
-                    if (data == 1) {
-                        alert('deleted succesfully');
-                        var table = $('#user_data').DataTable();
-                        table.ajax.reload();
-                    } else {
-                        alert('not deleted');
+                $.ajax({
+                    url: '<?php echo base_url('form_controller/deleteQuestion'); ?>',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data == 1) {
+                            alert('deleted succesfully');
+                            var table = $('#user_data').DataTable();
+                            table.ajax.reload();
+                        } else {
+                            alert('not deleted');
+                        }
+                    },
+                    error: function () {
+                        // Handle AJAX error here
+                        alert("An error occurred.");
                     }
-                },
-                error: function() {
-                    // Handle AJAX error here
-                    alert("An error occurred.");
-                }
+                });
+            }
+
+            $(".close").click(function () {
+                $('#exampleModal').hide();
+            })
+            function modalopen(id) {
+                $('#exampleModal').show();
+                $.ajax({
+                    url: '<?php echo base_url('form_controller/updateQuestion'); ?>',
+                    method: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        //console.log(data);
+                        
+                       $('#editquestion').val(data.question);
+                        $('#option1').val(data.option_1);
+                        $('#option2').val(data.option_2);
+                        $('#option3').val(data.option_3);
+                        $('#option4').val(data.option_4);
+                         $('#editanswer').val(data.answer);
+                        $('#id').val(data.id);
+
+                    },
+                    error: function () {
+                        // Handle AJAX error here
+                        alert("An error occurred while fetching topics.");
+                    }
+                });
+
+            }
+            $(document).ready(function () {
+                $("#save").submit(function (event) {
+                    event.preventDefault();
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo base_url(); ?>form_controller/QuestionChange",
+                        dataType: "json",
+                        data: formData,
+                        success: function (res) {
+                            if (res == 1) {
+
+                                $('#exampleModal').hide();
+                                var table = $('#user_data').DataTable();
+                                table.ajax.reload();
+                                alert("Data updated Successfully");
+                            } else {
+
+                                $('#exampleModal').hide();
+                                alert("Data did not update");
+                            }
+                        }
+
+                    });
+                });
             });
-        }
 
         </script>
 

@@ -24,18 +24,26 @@ class Form_model extends CI_Model {
        
     // } 
 
-  public function checkLogin($email, $password)
-{
-    $query = $this->db->get_where('users', array('email' => $email, 'password' => $password));
+//   public function checkLogin($email, $password)
+// {
+//     $query = $this->db->get_where('users', array('email' => $email, 'password' => $password));
 
-    if ($query->num_rows() > 0) {
-        $user = $query->row(); // Get the user data
-        return $user; // Return the user data
-    } else {
+//     if ($query->num_rows() > 0) {
+//         $user = $query->row(); // Get the user data
+//         return $user; // Return the user data
+//     } else {
+//         return false;
+//     }
+// }
+public function checkLogin($email,$password){
+    $user=$this->db->where('email',$email)->get('users')->row();
+    if($user && password_verify($password,$user->password)){
+        return $user;
+    }
+    else{
         return false;
     }
 }
-
     
     
  }
