@@ -255,6 +255,7 @@ class Form_controller extends CI_Controller
 
         // select statement to include 'question' and all options
         $this->db->select([
+            'id',
             ' question',
             'option_1 AS option1',
             '1 AS option_order',
@@ -467,6 +468,20 @@ class Form_controller extends CI_Controller
             }
         }
        
+    }
+
+    public function deleteQuestion(){
+        $id = $_POST['id'];
+        $this->load->model('Crud_model');
+        // print_r($_POST);die;
+        
+      // print_r($_POST);die;
+        $response = $this->Crud_model->deleteQuestion($id);
+        if ($response == 1) {
+            echo 1;
+        } else {
+            echo 2;
+        }
     }
 
 

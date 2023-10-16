@@ -26,5 +26,16 @@
         return $inserted;
     }
         //INSERT INTO `course_question_bank_master` ( `question`,`subject_id`, `topic_id`,`option_1`, `option_2`, `option_3`, `option_4`,`answer`,`lang_code`) VALUES ('abcd','1', '919','a', 'b', 'c', 'd','2','1');
+        public function deleteQuestion($id) {
+            $this->db->where('id', $id);
+            $data=$this->db->delete('course_question_bank_master');
+            return $data;
+        }
+
+    
+
+
+
     }
+
 ?>

@@ -264,11 +264,12 @@
                 </div>
             </div>
             <button type="button" class="btn btn-dark" id="addquest" disabled>Add Question</button>
+            <button type="button" class="btn btn-dark" id="search">Search</button>
         </form>
         <div id="overlay" style="display: none;"></div>
 
-       <div id="popup-form" class="form-container" style="display: none;">
-            
+        <div id="popup-form" class="form-container" style="display: none;">
+
             <button id="close-popup">&#x2716</button>
             <h2>Add Question</h2>
             <label for="question">Question:</label>
@@ -284,13 +285,13 @@
             <label for="answer">Answer:</label>
             <input type="text" id="answer" name="answer">
             <label for="language">LangugeID:</label>
-            <input type="text" id="language" name="language"> 
+            <input type="text" id="language" name="language">
 
             <input type="submit" class="btn btn-success ques_submit" value="Submit">
 
         </div>
-    
-    
+
+
 
 
 
@@ -411,121 +412,260 @@
 
                     });
                 });
+                $('#first_dropdown').select2({
+                    theme: "classic",
+                    width: 'resolve',
+                    allowClear: true,
+                    templateResult: showImage,
 
 
-                // $(document).ready(function () {
-                //     $("#language").change(function () {
+                    ajax: {
+                        url: '<?php echo base_url('form_controller/getSubjects'); ?>',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                search: params.term // Send the user's input as 'search' parameter
+                            };
+                        },
+                        processResults: function (data) {
+                            if (data && data.length > 0) {
+                                return {
+                                    results: data.map(function (subject) {
+                                        return {
+                                            id: subject.id,
+                                            text: subject.name,
+                                            image: subject.image
+                                        };
+                                    })
+                                };
+                            } else {
+                                return {
+                                    results: []
+                                };
+                            }
+                        },
+                        cache: true
+                    }
+                });
+                function showImage(option) {
+                    if (!option.id) {
+                        return option.text;
+                    }
 
-                //         var sub = $('#first_dropdown').val();
-                //         var top = $('#second_dropdown').val();
-                //         var lang = $("#language").val();
-                //         var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top + "/" + lang;
-                //         $('#download_content_csv').attr('action', hrefa);
-                //         $('#download_content_csv').prop('disable', false);
+                    // Use option.image to extract the image URL
+                    var imageUrl = option.image;
 
-                //         var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top + "/" + lang;
-                //         $('#Dword').attr('action', hrefac);
-                //         $('#Dword').prop('disable', false);
+                    var $option = $(
+                        `<span><img src="${imageUrl}" class="img-icon" />${option.id}. ${option.text}</span>`
+                    );
 
-
-                //         $.ajax({
-                //             url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
-                //             method: 'POST',
-                //             data: {
-                //                 "topic_id": top,
-                //                 "subject_id": sub,
-                //                 "lang_id": lang
-                //             },
-                //             dataType: 'json',
-                //             success: function (data) {
-
-                //                 if (data.length == 0) {
-                //                     data: [];
-                //                 }
-                //                 var table = $('#user_data').DataTable({
-
-                //                     "paging": true,
-                //                     "lengthMenu": [[1, 2, 3, 4, 25, 50, -1], [1, 2, 3, 4, 25, 50, 'All']],
-                //                     "bDestroy": true,
-                //                     data: data,
-                //                     columns: [
-
-                //                         { data: 'question', title: 'Question' },
-                //                         { data: 'option1', title: 'Option' },
-                //                         { data: 'option2', title: 'Option' },
-                //                         { data: 'option3', title: 'Option' },
-                //                         { data: 'option4', title: 'Option' },
-                //                         { data: 'answer', title: 'Answer' }
-                //                     ],
-                //                     order: [0] //sort first column (question)
-                //                 });
+                    return $option;
+                }
 
 
 
-                //             },
-                //             error: function () {
-                //                 alert("An error occurred while fetching topics.");
-                //             }
-                //         });
-                //     })
-                // });
+
+
+
+                $('#first_dropdown').on('change', function () {
+                    var selectedOption = $(this).val();
+                    $.ajax({
+                        url: '<?php echo base_url('form_Controller/getTopics'); ?>',
+                        method: 'POST',
+                        data: {
+                            selected_option: selectedOption
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data && data.length > 0) {
+                                $('#second_dropdown').empty(); // Clear existing options
+                                $('#second_dropdown').append('<option value="">Select Topic</option>'); // Add a default option
+
+                                // Add new options based on the AJAX response
+                                $.each(data, function (index, topic) {
+                                    $('#second_dropdown').append($('<option>', {
+                                        value: topic.id,
+                                        text: topic.topic
+                                    }));
+
+                                });
+                            } else {
+                                // Handle the case when no topics are found
+                                $('#second_dropdown').empty();
+                                $('#second_dropdown').append('<option value="">No topics found</option>');
+                            }
+                        },
+                        error: function () {
+                            // Handle AJAX error here
+                            alert("An error occurred while fetching topics.");
+                        }
+                    });
+                    $('#second_dropdown').select2({
+
+                    });
+                });
+
+                $(document).ready(function () {
+                    $("#language").change(function () {
+
+                        var sub = $('#first_dropdown').val();
+                        var top = $('#second_dropdown').val();
+                        var lang = $("#language").val();
+                        var hrefa = "<?php echo base_url(); ?>form_Controller/get_csv/" + sub + "/" + top + "/" + lang;
+                        $('#download_content_csv').attr('action', hrefa);
+                        $('#download_content_csv').prop('disable', false);
+
+                        var hrefac = "<?php echo base_url(); ?>form_Controller/get_word/" + sub + "/" + top + "/" + lang;
+                        $('#Dword').attr('action', hrefac);
+                        $('#Dword').prop('disable', false);
+
+
+                        $.ajax({
+                            url: '<?php echo base_url('form_Controller/getQuestion'); ?>',
+                            method: 'POST',
+                            data: {
+                                "topic_id": top,
+                                "subject_id": sub,
+                                "lang_id": lang
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                // if (data != 0) {
+                                //     $.each(data, function(index, topic) {
+                                //         $("#user_data").append("<tr><td>" + topic.question +
+                                //             "</td></tr>");
+                                //     });
+
+                                // } else {
+                                //     console.log(null);
+                                // }
+                                if (data.length == 0) {
+                                    data: [];
+                                }
+                                var table = $('#user_data').DataTable({
+
+                                    "paging": true,
+                                    "lengthMenu": [[1, 2, 3, 4, 25, 50, -1], [1, 2, 3, 4, 25, 50, 'All']],
+                                    "bDestroy": true,
+                                    data: data,
+                                    columns: [
+                                        // { data: 'question' },
+                                        // { data: 'option_1' }, 
+                                        // { data: 'option_2' }, 
+                                        // { data: 'option_3' },
+                                        // { data: 'option_4' }  
+                                        { data: 'question', title: 'Question' },
+                                        { data: 'option1', title: 'Option' },
+                                        { data: 'option2', title: 'Option' },
+                                        { data: 'option3', title: 'Option' },
+                                        { data: 'option4', title: 'Option' },
+                                        { data: 'answer', title: 'Answer' },
+                                        {
+                                            title: "Delete",
+                                            "data": null,
+                                            "render": function (data, type, row) {
+                                                return '<button class="btn btn-danger delete-btn" onclick="deleterec(' + data.id + ')" data-id="' + data.id + '">Delete</button>';
+                                            }
+                                        },
+                                    ],
+                                    order: [0] //sort first column (question)
+                                });
+
+
+
+                            },
+                            error: function () {
+                                alert("An error occurred while fetching topics.");
+                            }
+                        });
+                    })
+                });
+
+                
+
+
 
                 $(document).ready(function () {
 
                     $("#addquest").prop("disabled", true);
-                // Show the overlay and pop-up form when the "Add Question" button is clicked
-                $("#addquest").on("click", function () {
-                    $("#overlay").show();
-                    $("#popup-form").show();
-                });
+                    // Show the overlay and pop-up form when the "Add Question" button is clicked
+                    $("#addquest").on("click", function () {
+                        $("#overlay").show();
+                        $("#popup-form").show();
+                    });
 
-                // Close the overlay and pop-up form when the "Close" button is clicked
-                $("#close-popup").on("click", function () {
-                    $("#overlay").hide();
-                    $("#popup-form").hide();
-                });
-                $("#language").change(function () {
-        var selectedLanguage = $("#language").val();
-        if (selectedLanguage) {
-            $("#addquest").prop("disabled", false);
-        } else {
-            $("#addquest").prop("disabled", true);
-        }
-    });
-                
-                //get form data
-                $(".ques_submit").click(function(){
-                var questionData = {
-                    subject: $('#first_dropdown').val(),
-                    topic: $('#second_dropdown').val(),
-                    language: $('#language').val(),
-                    question: $('#question').val(),
-                    option1: $('#option_1').val(),
-                    option2: $('#option_2').val(),
-                    option3: $('#option_3').val(),
-                    option4: $('#option_4').val(),
-                    answer: $('#answer').val()
-                };
-                $.ajax({
-                    url: '<?php echo base_url('form_Controller/ajax_addQuestion'); ?>',
-                    method: 'POST',
-                    dataType: 'JSON',
-                    data:questionData,
-                    success: function (response) {
-                        if(response.status==true){
-                        alert("Question added successfully!");
+                    // Close the overlay and pop-up form when the "Close" button is clicked
+                    $("#close-popup").on("click", function () {
+                        $("#overlay").hide();
+                        $("#popup-form").hide();
+                    });
+                    $("#language").change(function () {
+                        var selectedLanguage = $("#language").val();
+                        if (selectedLanguage) {
+                            $("#addquest").prop("disabled", false);
+                        } else {
+                            $("#addquest").prop("disabled", true);
                         }
-                        else{
-                            alert('error');
-                        }
+                    });
+
+                    //get form data
+                    $(".ques_submit").click(function () {
+                        var questionData = {
+                            subject: $('#first_dropdown').val(),
+                            topic: $('#second_dropdown').val(),
+                            language: $('#language').val(),
+                            question: $('#question').val(),
+                            option1: $('#option_1').val(),
+                            option2: $('#option_2').val(),
+                            option3: $('#option_3').val(),
+                            option4: $('#option_4').val(),
+                            answer: $('#answer').val()
+                        };
+                        $.ajax({
+                            url: '<?php echo base_url('form_Controller/ajax_addQuestion'); ?>',
+                            method: 'POST',
+                            dataType: 'JSON',
+                            data: questionData,
+                            success: function (response) {
+                                if (response.status == true) {
+                                    alert("Question added successfully!");
+                                }
+                                else {
+                                    alert('error');
+                                }
+                            }
+
+                        });
+                    });
+
+                })
+         
+            });
+            function deleterec(id) {
+            $.ajax({
+                url: '<?php echo base_url('form_controller/deleteQuestion'); ?>',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data == 1) {
+                        alert('deleted succesfully');
+                        var table = $('#user_data').DataTable();
+                        table.ajax.reload();
+                    } else {
+                        alert('not deleted');
                     }
-                    
-                });
+                },
+                error: function() {
+                    // Handle AJAX error here
+                    alert("An error occurred.");
+                }
             });
+        }
 
-        })
-            });
-          
         </script>
 
 
