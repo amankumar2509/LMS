@@ -507,7 +507,7 @@
                 });
 
                 $(document).ready(function () {
-                    $("#language").change(function () {
+                    $("#search").on("click",function () {
 
                         var sub = $('#first_dropdown').val();
                         var top = $('#second_dropdown').val();
