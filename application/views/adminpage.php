@@ -144,6 +144,7 @@
                 error: function() {
                     // Handle AJAX error here
                     alert("An error occurred.");
+                    //toastr.warning('Deleted: successful', 'Delete');
                 }
             });
         }

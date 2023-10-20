@@ -56,6 +56,7 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 
+       
 
 </head>
 
@@ -108,6 +109,12 @@
                     <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                         <i class="bi bi-question-circle"></i>
                         <span>Need Help?</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url('form_controller/changePassword') ?>">
+                        <i class="bi bi-boxes"></i>
+                        <span>Change Password</span>
                     </a>
                 </li>
                 <li>

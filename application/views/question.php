@@ -689,7 +689,7 @@
                             option2: $('#option_2').val(),
                             option3: $('#option_3').val(),
                             option4: $('#option_4').val(),
-                           // answer: $('#answer').val()
+                            answer: $('#answer').val()
                         };
                         $.ajax({
                             url: '<?php echo base_url('form_Controller/ajax_addQuestion'); ?>',

@@ -2,8 +2,8 @@
 class Form_controller extends CI_Controller
 {
     public function __construct()
-    {
-        parent::__construct(); {
+    { {
+            parent::__construct();
             $this->load->model('form_model');
             $this->load->model("crud_model");
             $this->load->helper('url');
@@ -33,9 +33,9 @@ class Form_controller extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('register');
         } else {
-            $name=$this->input->post('name');
-            $email=$this->input->post('email');
-            $password=$this->input->post('password');
+            $name = $this->input->post('name');
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
 
@@ -43,9 +43,9 @@ class Form_controller extends CI_Controller
                 // 'name' => $this->input->post('name'),
                 // 'email' => $this->input->post('email'),
                 // 'password' => $this->input->post('password')
-                'name'=>$name,
-                'email'=>$email,
-                'password'=>$hashed_password,
+                'name' => $name,
+                'email' => $email,
+                'password' => $hashed_password,
 
             );
             // $this->load->model('form_model');
@@ -89,8 +89,12 @@ class Form_controller extends CI_Controller
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             $user = $this->form_model->checkLogin($email, $password);
-
+           // $this->session->set_userdata('user', $user);
+           $this->session->set_userdata('user', $user);
+             //var_dump($this->session->userdata('user'));
             if ($user) {
+                
+              
                 if ($user->status == 1) {
                     // User is an admin
                     $this->session->set_userdata('logged_in', true);
@@ -452,39 +456,41 @@ class Form_controller extends CI_Controller
     public function ajax_addQuestion()
     {
         // Handle the AJAX request here]
-         $input = $this->input->post();
+        $input = $this->input->post();
         if ($input) {
-            $data=[
-                'question'=>$input['question'], //right side from ajx and left side from db (mypov)
-                'topic_id'=>$input['topic'],
-                'subject_id'=>$input['subject'],
-                'answer'=>$input['answer'],
-                'option_1'=>$input['option1'],
-                'option_2'=>$input['option2'],
-                'option_3'=>$input['option3'],
-                'option_4'=>$input['option4'],
-                'lang_code'=>$input['language']
+            $data = [
+                'question' => $input['question'],
+                //right side from ajx and left side from db (mypov)
+                'topic_id' => $input['topic'],
+                'subject_id' => $input['subject'],
+                'answer' => $input['answer'],
+                'option_1' => $input['option1'],
+                'option_2' => $input['option2'],
+                'option_3' => $input['option3'],
+                'option_4' => $input['option4'],
+                'lang_code' => $input['language']
             ];
             $this->load->model('Crud_model');
-           
+
             $result = $this->Crud_model->addQuestion($data);
-            
+
             if ($result) {
                 echo json_encode(array('status' => true));
             } else {
-              //  echo json_encode(array('success' => false));
-              echo json_encode(array('status' => false, 'error' => $this->db->error()));
+                //  echo json_encode(array('success' => false));
+                echo json_encode(array('status' => false, 'error' => $this->db->error()));
             }
         }
-       
+
     }
 
-    public function deleteQuestion(){
+    public function deleteQuestion()
+    {
         $id = $_POST['id'];
         $this->load->model('Crud_model');
         // print_r($_POST);die;
-        
-      // print_r($_POST);die;
+
+        // print_r($_POST);die;
         $response = $this->Crud_model->deleteQuestion($id);
         if ($response == 1) {
             echo 1;
@@ -497,7 +503,7 @@ class Form_controller extends CI_Controller
         $id = $_POST['id'];
         // print_r($id);
         $data = $this->db->get_where('course_question_bank_master', ['id' => $id])->row_array();
-        
+
         echo json_encode($data);
     }
 
@@ -510,7 +516,7 @@ class Form_controller extends CI_Controller
             'option_2' => $_POST['option2'],
             'option_3' => $_POST['option3'],
             'option_4' => $_POST['option4'],
-             'answer' => $_POST['editanswer']
+            'answer' => $_POST['editanswer']
         ];
         $this->db->where('id', $id);
         $update = $this->db->update('course_question_bank_master', $data);
@@ -521,7 +527,51 @@ class Form_controller extends CI_Controller
             echo 'Update Error: ' . print_r($this->db->error(), true);
         }
     }
-    
+
+    public function changePassword()
+    {
+        $this->load->view('changepass');
+
+    }
+
+
+    public function processpasswordchange()
+    {
+        $this->form_validation->set_rules('oldpass', 'current password', 'required');
+        $this->form_validation->set_rules('newpassword', 'Enter New password', 'required');
+        $this->form_validation->set_rules('cpassword', 'New password', 'required|matches[newpassword]');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('changepass');
+        } else {
+
+            $user = $this->session->userdata('user');
+            if ($user) {
+            
+                $db_user = $this->db->where('id', $user_id)->get('users')->row();
+                if ($db_user) {
+                    $oldPassword = $this->input->post('oldpass');
+                    if (password_verify($oldPassword, $db_user->password)) {
+                        $newPassword = $this->input->post('newpassword');
+                        $hashedNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+                        $this->db->where('id', $user_id)->update('users', ['password' => $hashedNewPassword]);
+                        echo 'password changed successfully';
+
+                        $this->session->sess_destroy();
+                        redirect(base_url('form_controller/login'));
+
+                    } else {
+                        echo 'Incorrect old password.';
+                    }
+                } else {
+                    echo 'user not found.';
+                }
+            } else {
+                echo 'User data not found in the session';
+            }
+
+
+        }
+    }
 
 
 
