@@ -89,12 +89,12 @@ class Form_controller extends CI_Controller
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             $user = $this->form_model->checkLogin($email, $password);
-           // $this->session->set_userdata('user', $user);
-           $this->session->set_userdata('user', $user);
-             //var_dump($this->session->userdata('user'));
+            // $this->session->set_userdata('user', $user);
+            $this->session->set_userdata('user', $user);
+            //var_dump($this->session->userdata('user'));
             if ($user) {
-                
-              
+
+
                 if ($user->status == 1) {
                     // User is an admin
                     $this->session->set_userdata('logged_in', true);
@@ -546,25 +546,24 @@ class Form_controller extends CI_Controller
 
             $user = $this->session->userdata('user');
             if ($user) {
-            
-                $db_user = $this->db->where('id', $user_id)->get('users')->row();
-                if ($db_user) {
-                    $oldPassword = $this->input->post('oldpass');
-                    if (password_verify($oldPassword, $db_user->password)) {
-                        $newPassword = $this->input->post('newpassword');
-                        $hashedNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-                        $this->db->where('id', $user_id)->update('users', ['password' => $hashedNewPassword]);
-                        echo 'password changed successfully';
+                //  $user_id = $user->id;
+                //$db_user = $this->db->where('id', $user->id)->get('users')->row();
+                //  if ($db_user) {
+                $oldPassword = $this->input->post('oldpass');
+                if (password_verify($oldPassword, $user->password)) {
+                    $newPassword = $this->input->post('newpassword');
+                    $hashedNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+                    $this->db->where('id', $user->id)->update('users', ['password' => $hashedNewPassword]);
+                    echo 'password changed successfully';
 
-                        $this->session->sess_destroy();
-                        redirect(base_url('form_controller/login'));
+                    $this->session->sess_destroy();
+                    redirect(base_url('form_controller/login'));
 
-                    } else {
-                        echo 'Incorrect old password.';
-                    }
                 } else {
-                    echo 'user not found.';
+                    echo 'Incorrect old password.';
                 }
+                //}
+
             } else {
                 echo 'User data not found in the session';
             }
