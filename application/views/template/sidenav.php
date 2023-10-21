@@ -56,7 +56,7 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 
-       
+
 
 </head>
 
@@ -82,55 +82,59 @@
 
 
 
-
                 <li class="nav-item dropdown pe-3">
-
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="<?= base_url() ?>assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2"> Admin</span>
-                    </a><!-- End Profile Iamge Icon -->
-
+                        <?php if ($this->session->userdata('logged_in')): ?>
+                            <span class="d-none d-md-block dropdown-toggle ps-2">
+                                <?= $this->session->userdata('user')->name; ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="d-none d-md-block dropdown-toggle ps-2">Guest</span>
+                        <?php endif; ?>
+                    </a><!-- End Profile Image Icon -->
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>Admin</h6>
+                            <?php if ($this->session->userdata('logged_in')): ?>
+                                <h6>
+                                    <?= $this->session->userdata('user')->email; ?>
+                                </h6>
+                            <?php else: ?>
+                                <h6>Guest</h6>
+                            <?php endif; ?>
                             <span>controls</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Need Help?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center"
+                                href="<?php echo base_url('form_controller/changePassword') ?>">
+                                <i class="bi bi-boxes"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center"
+                                href="<?php echo base_url('form_controller/logout'); ?>">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
 
-
-                        <hr class="dropdown-divider">
-                </li>
-
-                <li>
-                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                        <i class="bi bi-question-circle"></i>
-                        <span>Need Help?</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url('form_controller/changePassword') ?>">
-                        <i class="bi bi-boxes"></i>
-                        <span>Change Password</span>
-                    </a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-
-                <li>
-                    <a class="dropdown-item d-flex align-items-center"
-                        href="<?php echo base_url('form_controller/logout'); ?>">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Sign Out</span>
-                    </a>
-                </li>
-
-            </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->

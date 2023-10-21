@@ -89,9 +89,8 @@ class Form_controller extends CI_Controller
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             $user = $this->form_model->checkLogin($email, $password);
-            // $this->session->set_userdata('user', $user);
             $this->session->set_userdata('user', $user);
-            //var_dump($this->session->userdata('user'));
+           // var_dump($this->session->userdata('user'));
             if ($user) {
 
 
