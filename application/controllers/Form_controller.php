@@ -185,6 +185,9 @@ class Form_controller extends CI_Controller
 
     public function adminpage()
     {
+        if (!$this->session->userdata('logged_in')) {
+            redirect(base_url('form_controller/login'));
+        }
         $this->load->view('adminpage');
 
 
