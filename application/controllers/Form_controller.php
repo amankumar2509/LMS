@@ -574,6 +574,10 @@ class Form_controller extends CI_Controller
         }
     }
 
+    public function profileView(){
+            $this->load->view('profile');
+    }
+
 
 
 
