@@ -1,3 +1,4 @@
+<?php include('application\views\template\sidenav.php') ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,78 +70,36 @@
             letter-spacing: 0.05em;
         }
 
-        #passchange .input-item {
-            background: #fff;
-            color: #333;
-            padding: 14.5px 0px 15px 9px;
-            border-radius: 5px 0px 0px 5px;
-        }
+        .input-box {
+        margin: 10px 0;
+    }
 
-    
+    label {
+        font-weight: bold;
+    }
 
-        #passchange input[class="form-input"] {
-            width: 240px;
-            height: 50px;
-            margin-top: 2%;
-            padding: 15px;
-            font-size: 16px;
-            font-family: 'Abel', sans-serif;
-            color: #5E6472;
-            outline: none;
-            border: none;
-            border-radius: 0px 5px 5px 0px;
-            transition: 0.2s linear;
-        }
+    input[type="password"] {
+        width: 130%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
-        #passchange input[id="txt-input"] {
-            width: 250px;
-        }
+    /* Style for the submit button */
+    .input-box.button input[type="submit"] {
+        background-color: #3e403f;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 36%;
+    }
 
-        #passchange input:focus {
-            transform: translateX(-2px);
-            border-radius: 5px;
-        }
+    .input-box.button input[type="submit"]:hover {
+        background-color: #555;
+    }
 
-        #passchange button {
-            display: inline-block;
-            color: #252537;
-            width: 280px;
-            height: 50px;
-            padding: 0 20px;
-            background: #fff;
-            border-radius: 5px;
-            outline: none;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s linear;
-            margin: 7% auto;
-            letter-spacing: 0.05em;
-        }
-
-        #passchange .submits {
-            width: 48%;
-            display: inline-block;
-            float: left;
-            margin-left: 2%;
-        }
-
-        #passchange .frgt-pass {
-            background: transparent;
-        }
-
-        #passchange .sign-up {
-            background: #B8F2E6;
-        }
-
-        #passchange button:hover {
-            transform: translatey(3px);
-            box-shadow: none;
-        }
-
-        #passchange button:hover {
-            animation: ani9 0.4s ease-in-out infinite alternate;
-        }
 
         @keyframes ani9 {
             0% {
@@ -163,14 +122,14 @@
             <div class="input-box">
                 <label for="password">Current Password</label>
                 <br>
-                <input type="password" name="oldpass" id="oldpass" placeholder="Enter your current password">
+                <input type="password" name="oldpass" id="oldpass" placeholder="Current password">
                 <div class="formerr" id="oldpassErr"></div>
             </div>
             <br>
             <div class="input-box">
                 <label for="password">New Password</label>
                 <br>
-                <input type="password" name="newpassword" id="newpassword" placeholder="Create new password">
+                <input type="password" name="newpassword" id="newpassword" placeholder="New password">
                 <div class="formerr" id="newpasswordErr"></div>
             </div>
             <br>
@@ -222,7 +181,7 @@
         return valid;
     }
     </script>
-    
+   
 </body>
 
 </html>
