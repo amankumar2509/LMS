@@ -1,7 +1,8 @@
 <?php
-include_once APPPATH . "/third_party/mpdf/autoload.php";
-//require_once APPPATH . '/third_party/vendor/autoload.php';
-//require_once FCPATH. '/vendor/autoload.php';
+//include_once APPPATH . "/third_party/mpdf/autoload.php";
+require_once APPPATH . '\third_party\vendor\autoload.php';
+//print_r(APPPATH);die;
+
 
 
 
@@ -607,7 +608,9 @@ class Form_controller extends CI_Controller
             $filename = time() . "_userInfo.pdf";
             $pdffile = $this->load->view('pdf_view', $data, TRUE);
 
-            $mpdf = new \Mpdf\Mpdf(['c', 'A4', ",", 0, 0, 0, 0, 0, 0]);
+           // $mpdf = new \Mpdf\Mpdf(['c', 'A4', ",", 0, 0, 0, 0, 0, 0]);
+           $mpdf= mPDF(['c', 'A4', ",", 0, 0, 0, 0, 0, 0]);
+
             $pdffile = $this->load->view('pdf_view', $data, TRUE);
             $mpdf->WriteHTML($pdffile);
 
@@ -663,7 +666,7 @@ class Form_controller extends CI_Controller
 
         // Send email and display debugging information
         $result = $this->email->send();
-        print_r($result);die;
+        
         // echo json_encode($result);
         if ($result) {
             return true; 
