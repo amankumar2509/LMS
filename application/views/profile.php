@@ -107,7 +107,7 @@
 
 
 
-                                    <button type="button" class="btn btn-warning">PDF</button>
+                                   
                                     <button type="button" class="btn btn-warning send" id="sendEmailButton"
                                         data-user-id="<?= $this->session->userdata('user')->id; ?>">Send email</button>
                                 <?php endif; ?>
