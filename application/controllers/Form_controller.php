@@ -614,16 +614,24 @@ class Form_controller extends CI_Controller
             $mpdf->Output("./upload/" . $filename, "F");
             //     $url = base_url() . '/uploads/' . $filename;
 
-            $mpdf->Output();
-            $email=$result['email'];
-            // $mpdf->Output('./uploads', "F");
-            $url='./upload/'.$filename;
-              $this->sendEmail($email, $url);
+            //$mpdf->Output();
+            $email = $result['email'];
+            $url = './upload/' . $filename;
+            $emailSent = $this->sendEmail($email, $url);
+
+
+            if ($emailSent) {
+
+                echo json_encode(['success' => true, 'message' => 'Email sent successfully']);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Email could not be sent']);
+            }
 
         } else {
 
-            echo 'result not found';
+            echo json_encode(['success' => false, 'error' => 'Result not found']);
         }
+
 
 
     }
@@ -655,7 +663,13 @@ class Form_controller extends CI_Controller
 
         // Send email and display debugging information
         $result = $this->email->send();
-        echo json_encode($result);
+        print_r($result);die;
+        // echo json_encode($result);
+        if ($result) {
+            return true; 
+        } else {
+            return false; 
+        }
     }
 
 

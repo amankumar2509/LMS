@@ -108,7 +108,8 @@
 
 
                                     <button type="button" class="btn btn-warning">PDF</button>
-                                    <button type="button" class="btn btn-warning send" id="sendEmailButton" data-user-id="<?= $this->session->userdata('user')->id; ?>">Send email</button>
+                                    <button type="button" class="btn btn-warning send" id="sendEmailButton"
+                                        data-user-id="<?= $this->session->userdata('user')->id; ?>">Send email</button>
                                 <?php endif; ?>
                             </div>
 
@@ -262,10 +263,13 @@
 
     <?php include('application\views\template\footer.php') ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> <!-- Include SweetAlert script -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    
     <script>
         $(document).ready(function () {
-            
-            $(document).on('click','.send', function (e) {
+
+            $(document).on('click', '.send', function (e) {
                 e.preventDefault;
                 const userId = $(this).data("user-id");
                 $.ajax({
@@ -273,14 +277,22 @@
                     url: "<?php echo base_url('form_controller/sendEmailWithPDF'); ?>",
                     dataType: "json",
                     data: {
-                        id:userId,
-                     },
+                        id: userId,
+                    },
 
                     success: function (data) {
                         if (data.success) {
-                            alert("Email sent successfully.");
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.message,
+                            });
                         } else {
-                            alert("Email could not be sent. Error: " + data.error);
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.error,
+                        });
                         }
                     }
                 });
