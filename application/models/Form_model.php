@@ -39,6 +39,7 @@ public function checkLogin($email,$password){
     $user=$this->db->where('email',$email)->get('users')->row();
     if($user && password_verify($password,$user->password)){
         $user_id = $user->id;
+        $user_about = $user->about;
         return $user;
     }
     else{

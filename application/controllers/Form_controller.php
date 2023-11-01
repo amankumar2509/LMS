@@ -1,19 +1,29 @@
 <?php
+include_once APPPATH . "/third_party/mpdf/autoload.php";
+//require_once APPPATH . '/third_party/vendor/autoload.php';
+//require_once FCPATH. '/vendor/autoload.php';
+
+
+
+
 class Form_controller extends CI_Controller
 {
     public function __construct()
-    { {
-            parent::__construct();
-            $this->load->model('form_model');
-            $this->load->model("crud_model");
-            $this->load->helper('url');
-            $this->load->helper('form');
-            $this->load->library('form_validation');
-            $this->load->library('session');
+    {
+        // print(APPPATH);die;
+        parent::__construct();
+        $this->load->model('form_model');
+        $this->load->model("crud_model");
+        $this->load->helper('url');
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->load->library('session');
+        // $this->load->library('Pdf');
+        $this->load->library('email');
 
 
 
-        }
+
 
     }
 
@@ -90,7 +100,7 @@ class Form_controller extends CI_Controller
             $password = $this->input->post('password');
             $user = $this->form_model->checkLogin($email, $password);
             $this->session->set_userdata('user', $user);
-           // var_dump($this->session->userdata('user'));
+            // var_dump($this->session->userdata('user'));
             if ($user) {
 
 
@@ -574,8 +584,78 @@ class Form_controller extends CI_Controller
         }
     }
 
-    public function profileView(){
-            $this->load->view('profile');
+    public function profileView()
+    {
+
+        $this->load->view('profile');
+    }
+
+    public function sendEmailWithPDF()
+    {
+        //echo APPPATH;die;
+        $userId = $this->input->post('id');
+        //$this->load->library('email');
+
+        // Fetch user data from the database
+        $this->db->select('*');
+        $this->db->where('id', $userId);
+        $result = $this->db->get('users')->row_array();
+        //print_r($result);die;
+        if ($result) {
+
+            $data['result'] = $result;
+            $filename = time() . "_userInfo.pdf";
+            $pdffile = $this->load->view('pdf_view', $data, TRUE);
+
+            $mpdf = new \Mpdf\Mpdf(['c', 'A4', ",", 0, 0, 0, 0, 0, 0]);
+            $pdffile = $this->load->view('pdf_view', $data, TRUE);
+            $mpdf->WriteHTML($pdffile);
+
+            $mpdf->Output("./upload/" . $filename, "F");
+            //     $url = base_url() . '/uploads/' . $filename;
+
+            $mpdf->Output();
+            $email=$result['email'];
+            // $mpdf->Output('./uploads', "F");
+            $url='./upload/'.$filename;
+              $this->sendEmail($email, $url);
+
+        } else {
+
+            echo 'result not found';
+        }
+
+
+    }
+
+    public function sendEmail($data, $url)
+    {
+        $em = $data;
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.gmail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'silverpeace69@gmail.com',
+            'smtp_pass' => 'hvhi pcvf oktc etgn',
+
+        );
+        $this->email->initialize($config);
+        $this->email->set_mailtype("html");
+        $this->email->set_newline("\r\n");
+        $this->email->attach($url);
+        // Email content
+        $urlContent = $url;
+
+        $this->email->to('silverpeace69@gmail.com');
+        $this->email->from('silverpeace69@gmail.com', 'sims');
+        $this->email->subject('User info');
+        $this->email->message($urlContent);
+
+
+
+        // Send email and display debugging information
+        $result = $this->email->send();
+        echo json_encode($result);
     }
 
 
