@@ -609,7 +609,7 @@ class Form_controller extends CI_Controller
             $pdffile = $this->load->view('pdf_view', $data, TRUE);
 
             $mpdf = new \Mpdf\Mpdf(['c', 'A4', ",", 0, 0, 0, 0, 0, 0]);
-           
+
             $pdffile = $this->load->view('pdf_view', $data, TRUE);
             $mpdf->WriteHTML($pdffile);
 
@@ -665,17 +665,42 @@ class Form_controller extends CI_Controller
 
         // Send email and display debugging information
         $result = $this->email->send();
-        
+
         // echo json_encode($result);
         if ($result) {
-            return true; 
+            return true;
         } else {
-            return false; 
+            return false;
         }
     }
 
+    // public function upload_image()
+    // {
 
+    //     if ($this->input->server('REQUEST_METHOD') == 'POST') {
 
+    //         $config['upload_path'] = './uploads/';
+    //         $config['allowed_types'] = 'gif|jpg|jpeg|png';
+
+    //         $this->load->library('upload', $config);
+
+    //         if ($this->upload->do_upload('userfile')) {
+    //             $data = $this->upload->data();
+    //             $uploaded_file = $data['file_name'];
+    //             $file_path = 'uploads/' . $uploaded_file;
+
+                
+    //             $this->load->model('form_model'); 
+    //             $this->Your_model->insert_file($uploaded_file, $file_path);
+
+    //             echo "File uploaded: $uploaded_file";
+    //         } else {
+                
+    //             $error = $this->upload->display_errors();
+    //             echo "Upload failed: $error";
+    //         }
+    //     }
+    // }
 
 }
 
